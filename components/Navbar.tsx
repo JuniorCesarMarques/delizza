@@ -4,7 +4,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 
 export default function Navbar(){
     return (
-        <nav>
+        <nav className="fixed bottom-0 w-screen">
             <ul className="flex items-center justify-between px-10 bg-zinc-200 py-3">
                 <li className="flex flex-col items-center">
                     <span><CiHome /></span>
