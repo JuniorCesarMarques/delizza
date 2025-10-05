@@ -7,7 +7,7 @@ type Inputs = {
 
 }
 
-export default function newCategory() {
+export default function NewCategory() {
   const {
     register,
     handleSubmit,
