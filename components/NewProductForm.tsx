@@ -9,6 +9,7 @@ import { uploadImage } from "@/lib/uploadImage";
 import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
+import { ProductForm } from "@/lib/types";
 
 type Categories = {
   id: string;
@@ -45,11 +46,11 @@ export default function NewProductForm() {
   }
 
 console.log(errors)
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ProductForm) => {
     console.log("ENTROU NO ONSUBMIT", data);
     try {
 
-      const imageUrl = await uploadImage(data.imageUrl?.[0]);
+      const imageUrl = await uploadImage(data.imageUrl?.[0] as File);
 
     console.log("ANTES DO FETCH");
 
