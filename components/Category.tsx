@@ -9,7 +9,7 @@ type CategoryProps = {
 export default function Category({category}: CategoryProps) {
     return (
         <div key={category.id}>
-          <p className="font-bold sticky top-0 text-zinc-800">{category.name}</p>
+          <p className="font-bold sticky top-0 text-zinc-800 mb-3">{category.name}</p>
 
           <div className="flex items-center gap-4 flex-wrap">
             {category.products.map((product) => (

@@ -25,7 +25,7 @@ export default function NewCategory() {
         body: JSON.stringify(data),
       });
     } catch (err) {
-
+      
     }
   };
 

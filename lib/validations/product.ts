@@ -7,7 +7,7 @@ export const productSchema = z.object({
   
   imageUrl: z
     .any()
-    .refine((files) => files instanceof FileList && files.length > 0, {message: "A imagem é obrigatória"}),
+    .optional(),
 
   price: z
     .number()

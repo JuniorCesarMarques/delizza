@@ -6,6 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { uploadImage } from "@/lib/uploadImage";
 
+import { useRouter } from "next/navigation";
+
+import toast from "react-hot-toast";
+
 type Categories = {
   id: string;
   name: string;
@@ -25,6 +29,8 @@ export default function NewProductForm() {
 
   const [preview, setPreview] = useState<string | null>(null);
 
+  const router = useRouter();
+
 
   // Gera uma url para a imagem
   const file = watch("imageUrl")?.[0];
@@ -38,16 +44,12 @@ export default function NewProductForm() {
     setValue("imageUrl", "")
   }
 
-
+console.log(errors)
   const onSubmit = async (data: any) => {
     console.log("ENTROU NO ONSUBMIT", data);
     try {
 
       const imageUrl = await uploadImage(data.imageUrl?.[0]);
-
-       if (!imageUrl) {
-      throw new Error("Erro ao fazer upload da imagem");
-    }
 
     console.log("ANTES DO FETCH");
 
@@ -56,15 +58,20 @@ export default function NewProductForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...data, imageUrl: imageUrl}),
+        body: JSON.stringify({...data, imageUrl: imageUrl || null}),
       });
 
       if (!res.ok) {
+        toast.error("Ocorreu um erro!")
         throw new Error("Erro ao criar produto!");
+
       }
 
       const result = await res.json();
       console.log("Produto criado", result);
+
+      toast.success("Produto criado com sucesso!")
+      router.push("/")
     } catch (err) {
       console.log(err);
     }
@@ -75,7 +82,6 @@ export default function NewProductForm() {
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -145,7 +151,6 @@ export default function NewProductForm() {
           <span className="text-gray-500 text-center">
             Clique para adicionar a imagem
           </span>
-          <span>{errors.imageUrl?.message}</span>
         </label>
         {preview && <div className="flex flex-col items-end">
           <span onClick={() => closePreview()}>X</span>

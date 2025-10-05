@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import Category from "./Category";
 
 export default function AllProducts() {
-  console.log("RENDER");
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
 
