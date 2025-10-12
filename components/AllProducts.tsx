@@ -3,7 +3,7 @@ import Category from "./Category";
 
 export default async function AllProducts() {
 
-    const baseUrl = process.env.NEXT_PUBLIC_URL;
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const res = await fetch(`${baseUrl || "http://localhost:3000"}/api/category`);
     const categories: CategoryType[] = await res.json();
