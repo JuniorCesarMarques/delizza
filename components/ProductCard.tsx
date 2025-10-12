@@ -11,7 +11,7 @@ type ProductProps = {
 export default function ProductCard({product}: ProductProps) {
   return (
     <Link href={`/product/${product.id}`}>
-      <div key={product.id} className="flex items-center justify-between border p-4 gap-2 w-150">
+      <div key={product.id} className="flex items-center justify-between border p-4 gap-2 max-w-150">
         <div>
           <p className="font-bold text-zinc-600">{product.name}</p>
           <p className="text-zinc-600">{product.description}</p>
