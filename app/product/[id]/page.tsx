@@ -11,7 +11,7 @@ export default async function ProductPage({params}: ParamsProps) {
 
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    const res = await fetch(`${baseUrl}/${id}`)
+    const res = await fetch(`${baseUrl}/api/product/${id}`)
     const product = await res.json();
 
 
