@@ -1,12 +1,21 @@
-import AllProducts from "@/components/AllProducts";
+import AllProducts from "@/components/ProductList";
 import ProductsSkeleton from "@/components/ProductsSkeleton";
 import { Suspense } from "react";
 
-export default function Home() {
+import { CategoryType } from "@/lib/types";
+
+export default async function Home() {
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+    const res = await fetch(`${baseUrl || "http://localhost:3000"}/api/category`);
+    const categories: CategoryType[] = await res.json();
+
+
   return (
     <div>
       <Suspense fallback={<ProductsSkeleton />}>
-        <AllProducts />
+        <AllProducts categories={categories} />
       </Suspense>
     </div>
   );

@@ -1,5 +1,5 @@
 import { CategoryType } from "@/lib/types"
-import Product from "./Product";
+import ProductCard from "./ProductCard";
 
 type CategoryProps = {
     category: CategoryType;
@@ -13,7 +13,7 @@ export default function Category({category}: CategoryProps) {
 
           <div className="flex items-center gap-8 flex-wrap">
             {category.products.map((product) => (
-              <Product key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
