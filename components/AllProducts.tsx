@@ -3,7 +3,9 @@ import Category from "./Category";
 
 export default async function AllProducts() {
 
-    const res = await fetch("http://localhost:3000/api/category");
+    const baseUrl = process.env.NEXT_PUBLIC_URL;
+
+    const res = await fetch(`${baseUrl || "http://localhost:3000"}/api/category`);
     const categories: CategoryType[] = await res.json();
 
 
