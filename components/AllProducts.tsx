@@ -1,20 +1,11 @@
-"use client";
-
 import { CategoryType } from "@/lib/types";
-import { useEffect, useState } from "react";
 import Category from "./Category";
 
-export default function AllProducts() {
+export default async function AllProducts() {
 
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+    const res = await fetch("http://localhost:3000/api/category");
+    const categories: CategoryType[] = await res.json();
 
-  useEffect(() => {
-    fetch("/api/category")
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
-  }, []);
-
-  console.log(categories);
 
   return (
     <div>

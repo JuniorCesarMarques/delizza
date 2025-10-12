@@ -21,5 +21,24 @@ model Product {
   imageUrl    String?  
   price       Int
   categoryId  String
+  additionals ProductAdditional[] 
   category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model Additional {
+  id        String    @id @default(cuid())
+  name      String
+  price     Float
+  products  ProductAdditional[]
+}
+
+
+model ProductAdditional {
+  id           String     @id @default(cuid())
+  productId    String
+  additionalId String
+  product      Product    @relation(fields: [productId], references: [id])
+  additional   Additional @relation(fields: [additionalId], references: [id])
+
+  @@unique([productId, additionalId]) // impede duplicação
 }
