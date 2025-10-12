@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header />
-        <div className="pb-[80px]">
+        <div className="py-[80px]">
           {children}
           <Toaster position="top-right" />
         </div>
