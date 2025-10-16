@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Header() {
     return (
-        <header className="fixed w-full z-10 bg-primary px-10 py-3 flex items-center justify-between">
+        <header className="fixed w-full z-10 bg-black px-10 py-3 flex items-center justify-between">
             <div className="flex gap-2 items-center">
                 <Image className="rounded-full" src="/logo.jpeg" width={50} height={50} alt="" />
                 <span className="text-zinc-100 font-bold">DELIZZA</span>

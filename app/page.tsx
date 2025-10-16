@@ -1,4 +1,4 @@
-import AllProducts from "@/components/ProductList";
+import CategoryList from "@/components/CategoryList";
 import ProductsSkeleton from "@/components/ProductsSkeleton";
 import { Suspense } from "react";
 
@@ -15,7 +15,7 @@ export default async function Home() {
   return (
     <div>
       <Suspense fallback={<ProductsSkeleton />}>
-        <AllProducts categories={categories} />
+        <CategoryList categories={categories} />
       </Suspense>
     </div>
   );
