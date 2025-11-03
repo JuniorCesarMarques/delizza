@@ -51,7 +51,7 @@ export async function DELETE(request: Request) {
       { message: "Categoria excluida com sucesso!" },
       { status: 200 }
     );
-  } catch (err: any) {
+  } catch (err) {
     console.dir(err, { depth: null });
 
     return NextResponse.json(
