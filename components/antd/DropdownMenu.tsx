@@ -14,15 +14,16 @@ type DropdownMenuProps = {
 
 const DropdownMenu = ({ items, id }: DropdownMenuProps) => {
   const { setModalProps } = useModal();
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
   const { refetch } = useQuery({
     queryKey: ["categories"],
     queryFn: () => handleDeleteCategory(id),
-    enabled: false, 
+    enabled: false,
   });
 
   async function handleDeleteCategory(id: string) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
+    const res = await fetch(`${baseUrl}/api/category`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

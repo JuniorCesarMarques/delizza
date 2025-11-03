@@ -8,8 +8,10 @@ export default async function Product({
 
     const category = searchParams.category;
 
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
 
-  const res = await fetch(`http://localhost:3000/api/product?category=${category}`);
+
+  const res = await fetch(`${baseUrl}/api/product?category=${category}`);
   const data = await res.json();
 
   return <ProductList products={data} />;

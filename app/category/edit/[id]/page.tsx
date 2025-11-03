@@ -4,7 +4,9 @@ export default async function EditCategory({ params }: { params: {id: string} })
 
 const id = params.id;
 
-    const res = await fetch(`http://localhost:3000/api/category/${id}`, {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+
+    const res = await fetch(`${baseUrl}/api/category/${id}`, {
         cache: "no-store"
     });
 
