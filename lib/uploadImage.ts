@@ -1,14 +1,22 @@
 import { supabase } from "@/lib/supabase";
 
-export async function uploadImage(file: File) {
-    console.log("UPLOAD IMAGE", file)
+export async function uploadImage(file: File, id?: string) {
+
   if (!file) return null;
 
+  const fileName = "nome";
 
-  const fileName = `${Date.now()}-${file.name}`;
+  if(id) {
+    const {data, error} = await supabase.storage
+    .from("delizza")
+    .remove([fileName])
+  }
+
+  const newFileName = `${Date.now()}-${file.name}`;
   const { data, error } = await supabase.storage
     .from("delizza") // nome do bucket no supabase
-    .upload(fileName, file);
+    .upload(newFileName, file);
+
 
   if (error) {
     console.error("Erro ao enviar:", error);
@@ -18,7 +26,7 @@ export async function uploadImage(file: File) {
   // Pega URL pública
   const { data: publicUrl } = supabase.storage
     .from("delizza")
-    .getPublicUrl(fileName);
+    .getPublicUrl(newFileName);
 
   return publicUrl.publicUrl;
 }

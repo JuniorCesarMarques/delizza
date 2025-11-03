@@ -45,14 +45,10 @@ export default function NewProductForm() {
     setValue("imageUrl", "")
   }
 
-console.log(errors)
   const onSubmit = async (data: ProductForm) => {
-    console.log("ENTROU NO ONSUBMIT", data);
     try {
 
       const imageUrl = await uploadImage(data.imageUrl?.[0] as File);
-
-    console.log("ANTES DO FETCH");
 
       const res = await fetch("/api/product", {
         method: "POST",
@@ -167,6 +163,7 @@ console.log(errors)
           Preço do Produto
         </label>
         <input
+          step={0.1}
           id="price"
           type="number"
           placeholder="Digite o preço do produto"

@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.16.2",
     "@supabase/supabase-js": "^2.58.0",
+    "@tanstack/react-query": "^5.90.5",
     "antd": "^5.27.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

@@ -17,7 +17,7 @@ export default function ProductCard({product}: ProductProps) {
           <p className="text-zinc-600">{product.description}</p>
           <p className="font-bold text-zinc-800">R$ {product.price},00</p>
         </div>
-        <Image src={product.imageUrl || "/sem-foto.png"} width={100} height={100} alt="" />
+          <Image src={product.imageUrl || "/sem-foto.png"} width={100} height={100} alt="" />
       </div>
     </Link>
   );

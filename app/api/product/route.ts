@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
 
-  const products = await prisma.product.findMany();
+  const category = searchParams.get("category");
 
-  return NextResponse.json(products);
+  if (category) {
+    const products = await prisma.product.findMany({
+      where: { category: { name: category } },
+    });
+    return NextResponse.json(products);
+  }
+
+  const allProducts = await prisma.product.findMany();
+  return Response.json(allProducts);
 }
 
 export async function POST(req: NextRequest) {
@@ -16,9 +25,10 @@ export async function POST(req: NextRequest) {
 
     const { name, description, price, category, imageUrl } = body;
 
-    const categoryCol = await prisma.category.findFirst({ where: { id: category } });
+    const categoryCol = await prisma.category.findFirst({
+      where: { id: category },
+    });
 
-    
     if (!categoryCol) {
       return NextResponse.json(
         { error: "Categoria inválida" },
@@ -43,7 +53,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({product: product}, { status: 201 });
+    return NextResponse.json({ product: product }, { status: 201 });
   } catch (err) {
     console.log(err);
     return NextResponse.json(

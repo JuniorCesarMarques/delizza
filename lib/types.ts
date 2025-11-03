@@ -19,5 +19,6 @@ export type ProductForm = {
 export type CategoryType = {
   id: string;
   name: string
+  image: string;
   products: ProductType[];
 }

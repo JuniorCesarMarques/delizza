@@ -5,6 +5,10 @@ import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
 
 import { Toaster } from "react-hot-toast";
+import ModalProvider from "@/app/contexts/ModalContext";
+import Modal from "@/components/Modal";
+
+import ReactQueryProvider from "@/app/providers/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +25,7 @@ export const metadata: Metadata = {
   description: "Pizzas Preparadas com Amor",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,12 +36,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        <div className="py-[80px]">
-          {children}
-          <Toaster position="top-right" />
-        </div>
-        <Navbar />
+        <ReactQueryProvider>
+          <ModalProvider>
+            <Header />
+            <div className="py-[80px]">
+              {children}
+              <Toaster position="top-right" />
+            </div>
+            <Modal />
+            <Navbar />
+          </ModalProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
