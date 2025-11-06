@@ -12,7 +12,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       { message: "Categoria não encontrada" },
       { status: 404 }
     );
-  }
+  };
 
   return NextResponse.json(category);
 }
@@ -32,6 +32,6 @@ export async function PATCH(request: Request, {params}: {params: Promise<{id: st
     }
   });
 
-  return NextResponse.json(updatedCategory);
+  return NextResponse.json(updatedCategory)
 
 }
