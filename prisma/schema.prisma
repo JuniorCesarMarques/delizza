@@ -10,7 +10,7 @@ datasource db {
 model Category {
   id       String    @id @default(cuid())
   name     String
-  image    String?
+  imageUrl String?
   products Product[]
 }
 

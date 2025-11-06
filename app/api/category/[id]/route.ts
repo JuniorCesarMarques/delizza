@@ -26,12 +26,12 @@ export async function PATCH(request: Request, {params}: {params: Promise<{id: st
   const updatedCategory = await prisma.category.update({
     where: { id: id },
     data: {
-      image: imageUrl,
+      imageUrl: imageUrl,
       name: categoryName
 
     }
   });
 
-  return NextResponse.json(updatedCategory)
+  return NextResponse.json(updatedCategory);
 
 }
