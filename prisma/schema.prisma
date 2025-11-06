@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,37 +8,36 @@ datasource db {
 }
 
 model Category {
-  id        String    @id @default(cuid())
-  name      String
-  image     String?
-  products  Product[]
+  id       String    @id @default(cuid())
+  name     String
+  image    String?
+  products Product[]
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String              @id @default(cuid())
   name        String
   description String?
-  imageUrl    String?  
   price       Int
   categoryId  String
-  additionals ProductAdditional[] 
-  category    Category  @relation(fields: [categoryId], references: [id])
+  imageUrl    String?
+  category    Category            @relation(fields: [categoryId], references: [id])
+  additionals ProductAdditional[]
 }
 
 model Additional {
-  id        String    @id @default(cuid())
-  name      String
-  price     Float
-  products  ProductAdditional[]
+  id       String              @id @default(cuid())
+  name     String
+  price    Float
+  products ProductAdditional[]
 }
-
 
 model ProductAdditional {
   id           String     @id @default(cuid())
   productId    String
   additionalId String
-  product      Product    @relation(fields: [productId], references: [id])
   additional   Additional @relation(fields: [additionalId], references: [id])
+  product      Product    @relation(fields: [productId], references: [id])
 
-  @@unique([productId, additionalId]) // impede duplicação
+  @@unique([productId, additionalId])
 }
