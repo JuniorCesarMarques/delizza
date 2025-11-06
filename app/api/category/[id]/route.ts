@@ -26,7 +26,7 @@ export async function PATCH(request: Request, {params}: {params: Promise<{id: st
   const updatedCategory = await prisma.category.update({
     where: { id: id },
     data: {
-      imageUrl: imageUrl,
+      imageUrl,
       name: categoryName
 
     }
