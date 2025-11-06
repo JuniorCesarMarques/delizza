@@ -22,20 +22,6 @@ export async function POST(request: Request) {
   return NextResponse.json(newCategory);
 }
 
-export async function PATCH(request: Request, {params}: {params: {id: string}}) {
-
-  const id = params.id;
-
-  const body = await request.json();
-
-  const updatedCategory = await prisma.category.update({
-    where: { id: id },
-    data: body
-  })
-
-  return NextResponse.json(updatedCategory);
-
-}
 
 export async function DELETE(request: Request) {
   try {

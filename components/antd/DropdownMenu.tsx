@@ -6,6 +6,7 @@ import { Dropdown, Space, MenuProps } from "antd";
 import { useModal } from "@/app/contexts/ModalContext";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 type DropdownMenuProps = {
   items: MenuProps["items"];
@@ -15,6 +16,7 @@ type DropdownMenuProps = {
 const DropdownMenu = ({ items, id }: DropdownMenuProps) => {
   const { setModalProps } = useModal();
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  const router = useRouter();
 
   const { refetch } = useQuery({
     queryKey: ["categories"],
@@ -53,6 +55,10 @@ const DropdownMenu = ({ items, id }: DropdownMenuProps) => {
         callback: () => refetch(),
         text: "Tem certeza que deseja excluir?",
       });
+    }
+
+    if(e.key === "edit"){
+      router.push(`/category/edit/${id}`)
     }
   };
 

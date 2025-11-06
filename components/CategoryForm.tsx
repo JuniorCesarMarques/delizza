@@ -1,7 +1,7 @@
 "use client";
 
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CategorySchema, categorySchema } from "@/lib/validations/category";
 import { CategoryType } from "@/lib/types";
@@ -31,22 +31,25 @@ export default function CategoryForm({
 
   const [preview, setPreview] = useState<string | null>(category?.image as string);
 
-    const file = watch("imageUrl")?.[0];
+    const file = watch("imageUrl");
+    console.log(file)
 
+    // cria um preview
     const onImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if(e.target.files instanceof FileList) {
         const file = e.target.files[0];
         const imageUrl = URL.createObjectURL(file);
         setPreview(imageUrl)
+        setValue("imageUrl", file)
       }
 
     }
 
-    if (file instanceof File && !preview) {
-    const objectUrl = URL.createObjectURL(file);
-    setValue("imageUrl", objectUrl);
-    setPreview(objectUrl);
-  }
+    // NÃO PODE CHAMAR UPLOAD IMAGE SE A IMAGEM NÃO FOR ATUALIZADA!!
+
+  useEffect(() => {
+    setPreview(category?.image as string)
+  }, [])
 
   const closePreview = () => {
     setPreview(null);

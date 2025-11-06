@@ -2,14 +2,15 @@ import { supabase } from "@/lib/supabase";
 
 export async function uploadImage(file: File, id?: string) {
 
-  if (!file) return null;
+  console.log("FILE", file)
 
-  const fileName = "nome";
+  if (!(file instanceof File)) return file;
+
 
   if(id) {
-    const {data, error} = await supabase.storage
+    await supabase.storage
     .from("delizza")
-    .remove([fileName])
+    .remove([file.name])
   }
 
   const newFileName = `${Date.now()}-${file.name}`;

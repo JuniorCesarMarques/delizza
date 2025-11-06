@@ -6,13 +6,16 @@ import { CategorySchema } from "@/lib/validations/category";
 import toast from "react-hot-toast";
 import { uploadImage } from "@/lib/uploadImage";
 import { CategoryType } from "@/lib/types";
+import { useRouter } from "next/navigation";
 
 
 export default function EditCategoryClient({id, category}: {id: string, category: CategoryType}) {
 
+  const router = useRouter();
+
       const onSubmit: SubmitHandler<CategorySchema> = async (data) => {
      try {
-          const imageUrl = await uploadImage((data.imageUrl?.[0] as File), id);
+          const imageUrl = await uploadImage((data.imageUrl), id);
     
           if (!imageUrl) {
             toast.error("Falha ao enviar a imagem. Tente novamente.");
@@ -33,6 +36,7 @@ export default function EditCategoryClient({id, category}: {id: string, category
           }
     
           toast.success("Categoria editada com sucesso!");
+          router.push("/");
         } catch (err) {
           console.log(err);
         }
