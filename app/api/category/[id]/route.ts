@@ -30,7 +30,7 @@ export async function PATCH(request: Request, {params}: {params: Promise<{id: st
       name: categoryName
 
     }
-  })
+  });
 
   return NextResponse.json(updatedCategory);
 
