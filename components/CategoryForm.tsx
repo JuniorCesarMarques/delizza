@@ -24,12 +24,12 @@ export default function CategoryForm({
   } = useForm<CategorySchema>({
     defaultValues: {
       categoryName: category?.name,
-      imageUrl: category?.image
+      imageUrl: category?.imageUrl
     },
     resolver: zodResolver(categorySchema),
   });
 
-  const [preview, setPreview] = useState<string | null>(category?.image as string);
+  const [preview, setPreview] = useState<string | null>(category?.imageUrl as string);
 
     const file = watch("imageUrl");
     console.log(file)
@@ -45,13 +45,11 @@ export default function CategoryForm({
 
     }
 
-    // NÃO PODE CHAMAR UPLOAD IMAGE SE A IMAGEM NÃO FOR ATUALIZADA!!
-
   useEffect(() => {
-    setPreview(category?.image as string)
+    setPreview(category?.imageUrl as string)
   }, [])
 
-  const closePreview = () => {
+  const closePreview: () => void = () => {
     setPreview(null);
     setValue("imageUrl", null);
   };

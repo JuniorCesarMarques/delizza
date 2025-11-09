@@ -22,29 +22,3 @@ export async function POST(request: Request) {
   return NextResponse.json(newCategory)
 }
 
-
-export async function DELETE(request: Request) {
-  try {
-    const { id } = await request.json();
-
-    if (!id) {
-      return Response.json({ error: "ID é obrigatório" }, { status: 400 });
-    }
-
-    await prisma.category.delete({ where: { id } });
-
-    return NextResponse.json(
-      { message: "Categoria excluida com sucesso!" },
-      { status: 200 }
-    );
-  } catch (err) {
-    console.dir(err, { depth: null });
-
-    return NextResponse.json(
-      {
-        error: err,
-      },
-      { status: 400 }
-    );
-  }
-}

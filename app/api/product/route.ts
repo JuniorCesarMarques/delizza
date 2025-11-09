@@ -10,9 +10,17 @@ export async function GET(req: Request) {
     const products = await prisma.product.findMany({
       where: { category: { name: category } },
     });
-    return NextResponse.json(products);
+
+      // Converte Decimal para string antes de retornar
+  const formatted = products.map((p) => ({
+    ...p,
+    price: p.price.toString(), // evita truncar casas
+  }));
+
+    return NextResponse.json(formatted);
   }
 
+  console.log("ENTROU AQIU")
   const allProducts = await prisma.product.findMany();
   return Response.json(allProducts);
 }
@@ -24,6 +32,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     const { name, description, price, category, imageUrl } = body;
+
+    const priceString = String(price).replace(",", ".");
+    const priceNumber = parseFloat(priceString);
 
     const categoryCol = await prisma.category.findFirst({
       where: { id: category },
@@ -49,7 +60,7 @@ export async function POST(req: NextRequest) {
         description,
         imageUrl,
         categoryId: categoryCol.id,
-        price,
+        price: priceNumber
       },
     });
 

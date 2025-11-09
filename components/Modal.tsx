@@ -3,6 +3,7 @@
 import { useModal } from "@/app/contexts/ModalContext";
 
 export default function Modal() {
+
   const { modalProps, setModalProps } = useModal();
 
   const onYes = () => {
@@ -11,7 +12,6 @@ export default function Modal() {
   }
 
   const onClose = () => {
-    console.log('clicou')
     setModalProps(null);
   }
 

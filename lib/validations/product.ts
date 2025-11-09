@@ -10,9 +10,8 @@ export const productSchema = z.object({
     .optional(),
 
   price: z
-    .number()
-    .min(0.01, "O numero deve ser maior que 0")
-    .positive("Preço deve ser maior que 0"),
+    .string()
+    .min(1, "O preço é obrigatório!"),
 
   category: z.string().min(1, "A categoria é obrigatória!"),
 });

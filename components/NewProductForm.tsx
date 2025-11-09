@@ -45,6 +45,8 @@ export default function NewProductForm() {
     setValue("imageUrl", "")
   }
 
+  console.log(watch("price"), "PRICE")
+
   const onSubmit = async (data: ProductForm) => {
     try {
 
@@ -79,6 +81,10 @@ export default function NewProductForm() {
       .then((res) => res.json())
       .then((data) => setCategories(data));
   }, []);
+
+  console.log(categories)
+
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -163,11 +169,11 @@ export default function NewProductForm() {
           Preço do Produto
         </label>
         <input
-          step={0.1}
+          step="any"
           id="price"
-          type="number"
+          type="text"
           placeholder="Digite o preço do produto"
-          {...register("price", { valueAsNumber: true })}
+          {...register("price")}
           className="border border-gray-300 rounded-lg p-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600 transition"
         />
         <span className="text-red-500">{errors.price?.message}</span>
