@@ -11,10 +11,9 @@ export async function GET(req: Request) {
       where: { category: { name: category } },
     });
 
-      // Converte Decimal para string antes de retornar
   const formatted = products.map((p) => ({
     ...p,
-    price: p.price.toString(), // evita truncar casas
+    price: Number(p.price).toFixed(2), // evita truncar casas
   }));
 
     return NextResponse.json(formatted);

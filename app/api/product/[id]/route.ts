@@ -18,7 +18,12 @@ export async function DELETE(
 ) {
   const { id } = await params;
 
-  await prisma.product.delete({where: {id}});
+  await prisma.product.delete({ where: { id } });
 
-  return NextResponse.json({message: "Produto excluido com secesso"}, {status: 200})
+  return NextResponse.json(
+    { message: "Produto excluido com secesso" },
+    { status: 200 }
+  );
 }
+
+

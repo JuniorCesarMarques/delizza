@@ -83,12 +83,14 @@ const { mutate: deleteCategory } = useMutation({
         />
       </div>
       <Link href={`/product?category=${category.name}`}>
-        <Image
-          src={category.imageUrl}
-          width={250}
-          height={150}
-          alt="Picture of the author"
-        />
+        <div className="w-50 h-50 overflow-hidden">
+          <Image
+            src={category.imageUrl}
+            width={200}
+            height={200}
+            alt="Picture of the author"
+          />
+        </div>
       </Link>
       <p className="font-bold">{category.name}</p>
     </div>

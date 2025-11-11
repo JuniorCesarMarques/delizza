@@ -4,7 +4,7 @@ export type ProductType = {
   description: string;
   price: string;
   imageUrl: string;
-  category: string;
+  categoryId: string;
 };
 
 export type ProductForm = {

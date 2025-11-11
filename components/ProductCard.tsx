@@ -37,7 +37,6 @@ export default function ProductCard({ product }: ProductProps) {
     router.refresh();
   };
 
-
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     e.domEvent.stopPropagation();
     if (e.key === "delete") {
@@ -49,34 +48,37 @@ export default function ProductCard({ product }: ProductProps) {
     }
 
     if (e.key === "edit") {
+      router.push(`/product/edit/${product.id}`)
     }
   };
 
   return (
     <div
-        key={product.id}
-        className="flex items-center relative justify-between border p-4 gap-2 max-w-150"
-      >
-    <Link href={`/product/${product.id}`}>
-          <div>
-            <p className="font-bold text-zinc-600">{product.name}</p>
-            <p className="text-zinc-600">{product.description}</p>
-            <p className="font-bold text-zinc-800">R${product.price}</p>
-          </div>
-          <Image
-            src={product.imageUrl || "/sem-foto.png"}
-            width={100}
-            height={100}
-            alt=""
-          />
+      key={product.id}
+      className="flex items-center relative justify-between border p-4 gap-2 max-w-150"
+    >
+      <Link href={`/product/${product.id}`}>
+        <div>
+          <p className="font-bold text-zinc-600">{product.name}</p>
+          <p className="text-zinc-600">{product.description}</p>
+          <p className="font-bold text-zinc-800">
+            R${product.price.replace(".", ",")}
+          </p>
+        </div>
+        <Image
+          src={product.imageUrl || "/sem-foto.png"}
+          width={100}
+          height={100}
+          alt=""
+        />
       </Link>
-          <DropdownMenu
-            handleClick={handleMenuClick}
-            items={[
-              { label: "Editar", key: "edit" },
-              { label: "Excluir", key: "delete" },
-            ]}
-          />
-      </div>
+      <DropdownMenu
+        handleClick={handleMenuClick}
+        items={[
+          { label: "Editar", key: "edit" },
+          { label: "Excluir", key: "delete" },
+        ]}
+      />
+    </div>
   );
 }
