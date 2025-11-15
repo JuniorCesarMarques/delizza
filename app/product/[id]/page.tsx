@@ -14,6 +14,8 @@ export default async function ProductPage({params}: ParamsProps) {
     const res = await fetch(`${baseUrl}/api/product/${id}`)
     const product = await res.json();
 
+    console.log("Product", product);
+
 
 return (
     <div className="max-w-4xl mx-auto p-6">
@@ -42,7 +44,7 @@ return (
           </p>
 
           <p className="text-3xl font-semibold text-green-600 mb-6">
-            R$ {product.price.toFixed(2)}
+            R$ {product.price.replace(".", ",")}
           </p>
 
           <button className="bg-red-600 text-white px-6 py-3 rounded-xl text-lg font-medium hover:bg-red-700 transition">

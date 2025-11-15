@@ -9,7 +9,9 @@ export async function GET(
 
   const product = await prisma.product.findUnique({ where: { id: id } });
 
-  return NextResponse.json(product);
+  const formated = {...product, price: product?.price.toFixed(2)}
+
+  return NextResponse.json(formated);
 }
 
 export async function DELETE(

@@ -26,10 +26,11 @@ model Product {
 }
 
 model Additional {
-  id       String              @id @default(cuid())
-  name     String
-  price    Float
-  products ProductAdditional[]
+  id               String     @id @default(cuid())
+  name             String
+  price            Decimal    @db.Decimal(10,2)
+  products         ProductAdditional[]
+  orderAdditionals OrderItemAdditional[]
 }
 
 model ProductAdditional {
@@ -40,4 +41,23 @@ model ProductAdditional {
   product      Product    @relation(fields: [productId], references: [id])
 
   @@unique([productId, additionalId])
+}
+
+model OrderItem {
+  id          String         @id @default(cuid())
+  orderId     String
+  productId   String
+  quantity    Int
+  basePrice   Decimal         @db.Decimal(10,2)
+  totalPrice  Decimal         @db.Decimal(10,2)
+  additionals OrderItemAdditional[]
+}
+
+model OrderItemAdditional {
+  id            String     @id @default(cuid())
+  orderItemId   String
+  additionalId  String
+  price         Decimal    @db.Decimal(10,2)
+  additional    Additional @relation(fields: [additionalId], references: [id])
+  orderItem     OrderItem  @relation(fields: [orderItemId], references: [id])
 }
