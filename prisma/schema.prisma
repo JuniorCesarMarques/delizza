@@ -34,7 +34,13 @@ model Additional {
   orderAdditionals OrderItemAdditional[]
 }
 
-
+model Border {
+  id          String  @id @default(cuid())
+  name        String
+  price       Decimal @db.Decimal(10,2) 
+  products    ProductBorder[]
+  orderItems  OrderItem[] 
+}
 
 model ProductBorder {
   id        String  @id @default(cuid())
