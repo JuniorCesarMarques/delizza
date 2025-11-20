@@ -11,9 +11,9 @@ export const productSchema = z.object({
 
   category: z.string().min(1, "A categoria é obrigatória!"),
     additionals: z
-    .union([z.string(), z.array(z.string())]),  // pode ser string ou array
+    .union([z.string(), z.array(z.string()), z.boolean()]),  // pode ser string, boolean ou array
     borders: z
-    .union([z.string(), z.array(z.string())])  // pode ser string ou array
+    .union([z.string(), z.array(z.string()), z.boolean()])  // pode ser string, boolen ou array
 });
 
 

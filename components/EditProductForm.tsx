@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ProductSchema, productSchema } from "@/lib/validations/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
 import toast from "react-hot-toast";
-import { ProductForm, ProductType } from "@/lib/types";
+import { Additional, Border, ProductForm, ProductType } from "@/lib/types";
 
 type Categories = {
   id: string;
@@ -30,8 +30,9 @@ export default function EditPRoductForm() {
   const params = useParams();
 
   const [categories, setCategories] = useState<Categories[]>([]);
-
   const [product, setProduct] = useState<ProductType>();
+  const [borders, setBorders] = useState<Border[]>();
+  const [additionals, setAdditionals] = useState<Additional[]>();
 
 
   const [preview, setPreview] = useState<string | null>(null);
@@ -50,7 +51,7 @@ export default function EditPRoductForm() {
     setValue("imageUrl", "");
   };
 
-  const onSubmit = async (data: ProductForm) => {
+  const onSubmit: SubmitHandler<ProductSchema> = async (data) => {
     try {
       const imageUrl = await uploadImage(data.imageUrl?.[0] as File);
 
@@ -77,15 +78,27 @@ export default function EditPRoductForm() {
     }
   };
 
-  // Tras o produto e todas as categorias
   useEffect(() => {
-    fetch("/api/category")
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
+    const fetchData = async () => {
+      const [productRes, categoriesRes, additionalsRes, borderRes] = await Promise.all([
+        fetch(`/api/product/${params.id}`),
+        fetch("/api/category"),
+        fetch("/api/additional"),
+        fetch("/api/border")
+      ]);
 
-    fetch(`/api/product/${params.id}`)
-      .then((res) => res.json())
-      .then((data) => setProduct(data));
+      const product = await productRes.json();
+      const categories = await categoriesRes.json();
+      const additionals = await additionalsRes.json();
+      const borders = await borderRes.json();
+
+      setCategories(categories);
+      setProduct(product)
+      setAdditionals(additionals);
+      setBorders(borders);
+    };
+
+    fetchData();
   }, []);
 
 
@@ -96,10 +109,13 @@ export default function EditPRoductForm() {
     setValue("description", product.description);
     setValue("price", product.price);
     setValue("category", product.categoryId); 
+    setValue("additionals", product.additionals[0]);
+    setValue("borders", product.borders[0]);
     setPreview(product.imageUrl); 
   }
 }, [product, setValue]);
 
+console.log(product, "PRODUCT")
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col mb-4">
@@ -220,7 +236,29 @@ export default function EditPRoductForm() {
         <span className="text-red-500">{errors.category?.message}</span>
       </div>
 
-      <button className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition">
+      {/* Adicionais */}
+      <div className="flex flex-col gap-2">
+        <p className="mb-1 text-gray-700 font-medium text-sm">Adicionais</p>
+        {additionals?.map((a) => (
+          <label key={a.id} className="flex items-center gap-2 mb-2">
+            <input type="checkbox" value={a.id} {...register("additionals")} />
+            {a.name}
+          </label>
+        ))}
+      </div>
+
+      {/* Bordas */}
+      <div className="flex flex-col gap-2">
+        <p className="mb-1 text-gray-700 font-medium text-sm">Bordas</p>
+        {borders?.map((a) => (
+          <label key={a.id} className="flex items-center gap-2 mb-2">
+            <input type="checkbox" value={a.id} {...register("borders")} />
+            {a.name}
+          </label>
+        ))}
+      </div>
+
+      <button type="submit" className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition">
         Editar Produto
       </button>
     </form>

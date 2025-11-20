@@ -7,9 +7,15 @@ export async function GET(
 ) {
   const { id } = await params;
 
-  const product = await prisma.product.findUnique({ where: { id: id } });
+  const product = await prisma.product.findUnique({
+    where: { id: id },
+    include: {
+      additionals: true,
+      borders: true,
+    },
+  });
 
-  const formated = {...product, price: product?.price.toFixed(2)}
+  const formated = { ...product, price: product?.price.toFixed(2) };
 
   return NextResponse.json(formated);
 }
@@ -27,5 +33,3 @@ export async function DELETE(
     { status: 200 }
   );
 }
-
-

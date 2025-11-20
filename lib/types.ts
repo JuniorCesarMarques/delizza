@@ -5,6 +5,8 @@ export type ProductType = {
   price: string;
   imageUrl: string;
   categoryId: string;
+  additionals: string[];
+  borders: string[];
 };
 
 export type ProductForm = {

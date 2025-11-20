@@ -5,9 +5,25 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { name, description, imageUrl, category, price } = await req.json();
+  const { name, description, imageUrl, category, price, additionals, borders } =
+    await req.json();
 
-  console.log("PRIÇO DO PRODUTO", price)
+  let additionalsArray;
+  let bordersArray;
+
+  // Caso venha false do front
+  if (!additionals || !borders) {
+    additionalsArray = [];
+    bordersArray = [];
+  } else {
+    // Se for uma string se torna um array
+    additionalsArray = Array.isArray(additionals) ? additionals : [additionals];
+    bordersArray = Array.isArray(borders) ? borders : [borders];
+  }
+
+  const priceString = String(price).replace(",", ".");
+  const priceNumber = parseFloat(priceString);
+
   const { id } = await params;
 
   await prisma.product.update({
@@ -17,7 +33,17 @@ export async function PATCH(
       description,
       imageUrl,
       categoryId: category,
-      price,
+      price: priceNumber,
+      additionals: {
+        create: additionalsArray.map((additionalId: string) => ({
+            additionalId,
+          })),
+      },
+      borders: {
+        create: bordersArray.map((borderId: string) => ({
+          borderId,
+        })),
+      }
     },
   });
 

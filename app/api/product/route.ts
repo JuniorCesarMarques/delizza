@@ -9,6 +9,10 @@ export async function GET(req: Request) {
   if (category) {
     const products = await prisma.product.findMany({
       where: { category: { name: category } },
+      include: {
+        additionals: true,
+        borders: true
+      }
     });
 
     const formatted = products.map((p) => ({
@@ -19,7 +23,6 @@ export async function GET(req: Request) {
     return NextResponse.json(formatted);
   }
 
-  console.log("ENTROU AQIU");
   const allProducts = await prisma.product.findMany();
   return Response.json(allProducts);
 }
@@ -28,18 +31,30 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const { name, description, price, category, imageUrl, additionals } = body;
+    const {
+      name,
+      description,
+      price,
+      category,
+      imageUrl,
+      additionals,
+      borders,
+    } = body;
 
     let additionalsArray;
+    let bordersArray;
 
     // Caso venha false do front
     if (!additionals) {
       additionalsArray = [];
+      bordersArray = [];
     } else {
       // Se for uma string se torna um array
       additionalsArray = Array.isArray(additionals)
         ? additionals
         : [additionals];
+
+      bordersArray = Array.isArray(borders) ? borders : [borders];
     }
 
     const priceString = String(price).replace(",", ".");
@@ -73,6 +88,11 @@ export async function POST(req: NextRequest) {
         additionals: {
           create: additionalsArray.map((additionalId: string) => ({
             additionalId,
+          })),
+        },
+        borders: {
+          create: bordersArray.map((borderId: string) => ({
+            borderId,
           })),
         },
       },
