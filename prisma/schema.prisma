@@ -23,6 +23,7 @@ model Product {
   imageUrl    String?
   category    Category            @relation(fields: [categoryId], references: [id])
   additionals ProductAdditional[]
+  borders     ProductBorder[]
 }
 
 model Additional {
@@ -31,6 +32,24 @@ model Additional {
   price            Decimal    @db.Decimal(10,2)
   products         ProductAdditional[]
   orderAdditionals OrderItemAdditional[]
+}
+
+model Border {
+  id          String  @id @default(cuid())
+  name        String
+  price       Decimal @db.Decimal(10,2) 
+  products    ProductBorder[]
+  orderItems  OrderItem[] 
+}
+
+model ProductBorder {
+  id        String  @id @default(cuid())
+  productId String
+  borderId  String
+  product   Product @relation(fields: [productId], references: [id])
+  border    Border  @relation(fields: [borderId], references: [id])
+
+  @@unique([productId, borderId])
 }
 
 model ProductAdditional {
@@ -47,10 +66,12 @@ model OrderItem {
   id          String         @id @default(cuid())
   orderId     String
   productId   String
+  borderId    String?  
   quantity    Int
   basePrice   Decimal         @db.Decimal(10,2)
   totalPrice  Decimal         @db.Decimal(10,2)
   additionals OrderItemAdditional[]
+  border      Border?         @relation(fields: [borderId], references: [id])
 }
 
 model OrderItemAdditional {

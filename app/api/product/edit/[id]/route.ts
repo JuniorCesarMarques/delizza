@@ -6,6 +6,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { name, description, imageUrl, category, price } = await req.json();
+
+  console.log("PRIÇO DO PRODUTO", price)
   const { id } = await params;
 
   await prisma.product.update({

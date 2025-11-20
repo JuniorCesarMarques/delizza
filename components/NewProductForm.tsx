@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { ProductSchema, productSchema } from "@/lib/validations/product";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { uploadImage } from "@/lib/uploadImage";
 import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
-import { ProductForm } from "@/lib/types";
+import { Additional, Border, ProductForm } from "@/lib/types";
 
 type Categories = {
   id: string;
@@ -23,15 +23,17 @@ export default function NewProductForm() {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<ProductSchema>({ resolver: zodResolver(productSchema) });
-
+  } = useForm<ProductSchema>({
+    resolver: zodResolver(productSchema),
+  });
 
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [additionals, setAdditionals] = useState<Additional[]>();
+  const [borders, setBorders] = useState<Border[]>()
 
   const [preview, setPreview] = useState<string | null>(null);
 
   const router = useRouter();
-
 
   // Gera uma url para a imagem
   const file = watch("imageUrl")?.[0];
@@ -42,14 +44,12 @@ export default function NewProductForm() {
 
   const closePreview = () => {
     setPreview(null);
-    setValue("imageUrl", "")
-  }
+    setValue("imageUrl", "");
+  };
 
-  console.log(watch("price"), "PRICE")
-
-  const onSubmit = async (data: ProductForm) => {
+  const onSubmit: SubmitHandler<ProductSchema> = async (data) => {
+    console.log("ENTROU AQUI");
     try {
-
       const imageUrl = await uploadImage(data.imageUrl?.[0] as File);
 
       const res = await fetch("/api/product", {
@@ -57,34 +57,45 @@ export default function NewProductForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...data, imageUrl: imageUrl || null}),
+        body: JSON.stringify({ ...data, imageUrl: imageUrl || null }),
       });
 
       if (!res.ok) {
-        toast.error("Ocorreu um erro!")
+        toast.error("Ocorreu um erro!");
         throw new Error("Erro ao criar produto!");
-
       }
 
       const result = await res.json();
       console.log("Produto criado", result);
 
-      toast.success("Produto criado com sucesso!")
-      router.push("/")
+      toast.success("Produto criado com sucesso!");
+      router.push("/");
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    fetch("/api/category")
-      .then((res) => res.json())
-      .then((data) => setCategories(data));
+    const fetchData = async () => {
+      const [categoriesRes, additionalsRes, borderRes] = await Promise.all([
+        fetch("/api/category"),
+        fetch("/api/additional"),
+        fetch("/api/border")
+      ]);
+
+      const categories = await categoriesRes.json();
+      const additionals = await additionalsRes.json();
+      const borders = await borderRes.json();
+
+      setCategories(categories);
+      setAdditionals(additionals);
+      setBorders(borders);
+    };
+
+    fetchData();
   }, []);
 
-  console.log(categories)
-
-
+  console.log(borders);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -155,10 +166,12 @@ export default function NewProductForm() {
             Clique para adicionar a imagem
           </span>
         </label>
-        {preview && <div className="flex flex-col items-end">
-          <span onClick={() => closePreview()}>X</span>
-          <img src={preview as string} />
-        </div>}
+        {preview && (
+          <div className="flex flex-col items-end">
+            <span onClick={() => closePreview()}>X</span>
+            <img src={preview as string} />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col mb-4">
@@ -204,7 +217,32 @@ export default function NewProductForm() {
         <span className="text-red-500">{errors.category?.message}</span>
       </div>
 
-      <button className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition">
+      {/* Adicionais */}
+      <div className="flex flex-col gap-2">
+        <p className="mb-1 text-gray-700 font-medium text-sm">Adicionais</p>
+        {additionals?.map((a) => (
+          <label key={a.id} className="flex items-center gap-2 mb-2">
+            <input type="checkbox" value={a.id} {...register("additionals")} />
+            {a.name}
+          </label>
+        ))}
+      </div>
+
+      {/* Bordas */}
+      <div className="flex flex-col gap-2">
+        <p className="mb-1 text-gray-700 font-medium text-sm">Bordas</p>
+        {borders?.map((a) => (
+          <label key={a.id} className="flex items-center gap-2 mb-2">
+            <input type="checkbox" value={a.id} {...register("borders")} />
+            {a.name}
+          </label>
+        ))}
+      </div>
+
+      <button
+        type="submit"
+        className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition"
+      >
         Criar Produto
       </button>
     </form>

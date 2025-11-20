@@ -11,8 +11,9 @@ export type ProductForm = {
   name: string;
   description?: string;
   price: string;
-  imageUrl?: FileList; // aqui é FileList, não string
+  imageUrl?: FileList; 
   category: string;
+  additionals: string[]
 };
 
 
@@ -21,4 +22,16 @@ export type CategoryType = {
   name: string
   imageUrl: string;
   products: ProductType[];
+}
+
+export type Additional = {
+  id: string,
+  name: string,
+  price: string
+}
+
+export type Border = {
+  id: string,
+  name: string,
+  price: string
 }

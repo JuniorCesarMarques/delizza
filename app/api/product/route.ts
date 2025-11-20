@@ -11,26 +11,36 @@ export async function GET(req: Request) {
       where: { category: { name: category } },
     });
 
-  const formatted = products.map((p) => ({
-    ...p,
-    price: Number(p.price).toFixed(2), // evita truncar casas
-  }));
+    const formatted = products.map((p) => ({
+      ...p,
+      price: Number(p.price).toFixed(2), // evita truncar casas
+    }));
 
     return NextResponse.json(formatted);
   }
 
-  console.log("ENTROU AQIU")
+  console.log("ENTROU AQIU");
   const allProducts = await prisma.product.findMany();
   return Response.json(allProducts);
 }
 
 export async function POST(req: NextRequest) {
-  console.log("ENTROU NO HANDLER");
-
   try {
     const body = await req.json();
 
-    const { name, description, price, category, imageUrl } = body;
+    const { name, description, price, category, imageUrl, additionals } = body;
+
+    let additionalsArray;
+
+    // Caso venha false do front
+    if (!additionals) {
+      additionalsArray = [];
+    } else {
+      // Se for uma string se torna um array
+      additionalsArray = Array.isArray(additionals)
+        ? additionals
+        : [additionals];
+    }
 
     const priceString = String(price).replace(",", ".");
     const priceNumber = parseFloat(priceString);
@@ -59,7 +69,12 @@ export async function POST(req: NextRequest) {
         description,
         imageUrl,
         categoryId: categoryCol.id,
-        price: priceNumber
+        price: priceNumber,
+        additionals: {
+          create: additionalsArray.map((additionalId: string) => ({
+            additionalId,
+          })),
+        },
       },
     });
 
