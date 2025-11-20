@@ -13,7 +13,7 @@ export default function NewAdditional() {
     formState: { errors },
   } = useForm<AdditionalSchema>({resolver: zodResolver(additionalSchema)});
 
-  const onSubmit: SubmitHandler<AdditionalSchema> = async (data: any) => {
+  const onSubmit: SubmitHandler<AdditionalSchema> = async (data) => {
     try {
       const res = await fetch(`/api/additional`, {
         method: "POST",
