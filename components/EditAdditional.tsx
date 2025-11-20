@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Additional } from "@/lib/types"
@@ -20,7 +20,7 @@ export default function EditAdditional({additional}: {additional: Additional}) {
     formState: { errors },
   } = useForm<AdditionalSchema>({ resolver: zodResolver(additionalSchema) });
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<AdditionalSchema>  = async (data) => {
     try {
       const res = await fetch(`/api/additional/${additional.id}`, {
         method: "PATCH",

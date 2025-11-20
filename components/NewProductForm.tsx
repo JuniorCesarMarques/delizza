@@ -9,7 +9,7 @@ import { uploadImage } from "@/lib/uploadImage";
 import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
-import { Additional, Border, ProductForm } from "@/lib/types";
+import { Additional, Border } from "@/lib/types";
 
 type Categories = {
   id: string;

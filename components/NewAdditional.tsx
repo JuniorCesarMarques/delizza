@@ -2,7 +2,7 @@
 
 import { additionalSchema, AdditionalSchema } from "@/lib/validations/additional";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export default function NewAdditional() {
@@ -13,7 +13,7 @@ export default function NewAdditional() {
     formState: { errors },
   } = useForm<AdditionalSchema>({resolver: zodResolver(additionalSchema)});
 
-  const onSubmit = async (data: any) => {
+  const onSubmit: SubmitHandler<AdditionalSchema> = async (data: any) => {
     try {
       const res = await fetch(`/api/additional`, {
         method: "POST",
