@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
 import toast from "react-hot-toast";
-import { Additional, Border, ProductForm, ProductType } from "@/lib/types";
+import { Additional, Border, EditProductType } from "@/lib/types";
 
 type Categories = {
   id: string;
@@ -29,15 +29,18 @@ export default function EditPRoductForm() {
 
   const params = useParams();
 
+
   const [categories, setCategories] = useState<Categories[]>([]);
-  const [product, setProduct] = useState<ProductType>();
+  const [product, setProduct] = useState<EditProductType>();
   const [borders, setBorders] = useState<Border[]>();
   const [additionals, setAdditionals] = useState<Additional[]>();
-
 
   const [preview, setPreview] = useState<string | null>(null);
 
   const router = useRouter();
+
+  console.log("ADDITIONALS WATCH", watch("additionals"))
+  console.log("BORDERS WATCH", watch("borders"))
 
   // Gera uma url para a imagem
   const file = watch("imageUrl")?.[0];
@@ -80,12 +83,13 @@ export default function EditPRoductForm() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const [productRes, categoriesRes, additionalsRes, borderRes] = await Promise.all([
-        fetch(`/api/product/${params.id}`),
-        fetch("/api/category"),
-        fetch("/api/additional"),
-        fetch("/api/border")
-      ]);
+      const [productRes, categoriesRes, additionalsRes, borderRes] =
+        await Promise.all([
+          fetch(`/api/product/${params.id}`),
+          fetch("/api/category"),
+          fetch("/api/additional"),
+          fetch("/api/border"),
+        ]);
 
       const product = await productRes.json();
       const categories = await categoriesRes.json();
@@ -93,7 +97,7 @@ export default function EditPRoductForm() {
       const borders = await borderRes.json();
 
       setCategories(categories);
-      setProduct(product)
+      setProduct(product);
       setAdditionals(additionals);
       setBorders(borders);
     };
@@ -101,21 +105,30 @@ export default function EditPRoductForm() {
     fetchData();
   }, []);
 
-
-// Preenche os campos do formulário
+  // Preenche os campos do formulário
   useEffect(() => {
-  if (product) {
-    setValue("name", product.name);
-    setValue("description", product.description);
-    setValue("price", product.price);
-    setValue("category", product.categoryId); 
-    setValue("additionals", product.additionals[0]);
-    setValue("borders", product.borders[0]);
-    setPreview(product.imageUrl); 
-  }
-}, [product, setValue]);
+    if (product) {
 
-console.log(product, "PRODUCT")
+      const formatedAdditionals = product.additionals.map(additional => {
+        return additional.additionalId
+      });
+
+      const formatedBorders = product.borders.map(border => {
+        return border.borderId
+      });
+
+      console.log("FORMATED VALUES", formatedAdditionals, formatedBorders);
+
+      setValue("name", product.name);
+      setValue("description", product.description);
+      setValue("price", product.price);
+      setValue("category", product.categoryId);
+      setValue("additionals", formatedAdditionals);
+      setValue("borders", formatedBorders);
+      setPreview(product.imageUrl);
+    }
+  }, [product, setValue]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col mb-4">
@@ -258,7 +271,10 @@ console.log(product, "PRODUCT")
         ))}
       </div>
 
-      <button type="submit" className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition">
+      <button
+        type="submit"
+        className="bg-red-600 text-white rounded-lg py-2 px-4 hover:bg-red-700 transition"
+      >
         Editar Produto
       </button>
     </form>

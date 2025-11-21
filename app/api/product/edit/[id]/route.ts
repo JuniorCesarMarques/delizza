@@ -8,18 +8,26 @@ export async function PATCH(
   const { name, description, imageUrl, category, price, additionals, borders } =
     await req.json();
 
+    console.log("ADDITIONALS E BORDERS VINDO DO FRONT", additionals, borders);
+
   let additionalsArray;
   let bordersArray;
 
   // Caso venha false do front
-  if (!additionals || !borders) {
+  if (!additionals) {
     additionalsArray = [];
-    bordersArray = [];
   } else {
     // Se for uma string se torna um array
     additionalsArray = Array.isArray(additionals) ? additionals : [additionals];
+    
+  }
+
+  if(!borders) {
+    bordersArray = [];
+  } else {
     bordersArray = Array.isArray(borders) ? borders : [borders];
   }
+
 
   const priceString = String(price).replace(",", ".");
   const priceNumber = parseFloat(priceString);
@@ -35,17 +43,20 @@ export async function PATCH(
       categoryId: category,
       price: priceNumber,
       additionals: {
-        create: additionalsArray.map((additionalId: string) => ({
-            additionalId,
-          })),
+        deleteMany: {},
+        create: additionalsArray.map(additionalId => ({
+         additionalId
+        }))
       },
       borders: {
+        deleteMany: {},
         create: bordersArray.map((borderId: string) => ({
           borderId,
         })),
       }
     },
   });
+
 
   return NextResponse.json(
     { message: "Produto editado com secesso" },

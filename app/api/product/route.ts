@@ -11,8 +11,8 @@ export async function GET(req: Request) {
       where: { category: { name: category } },
       include: {
         additionals: true,
-        borders: true
-      }
+        borders: true,
+      },
     });
 
     const formatted = products.map((p) => ({
@@ -54,6 +54,13 @@ export async function POST(req: NextRequest) {
         ? additionals
         : [additionals];
 
+      bordersArray = Array.isArray(borders) ? borders : [borders];
+    }
+
+    if (!borders) {
+      bordersArray = [];
+    } else {
+      // Se for uma string se torna um array
       bordersArray = Array.isArray(borders) ? borders : [borders];
     }
 
