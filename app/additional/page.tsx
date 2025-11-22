@@ -31,7 +31,7 @@ export default function AdditionalsPage() {
       {additionals?.map((additional) => (
         <AdditionalCard key={additional.id} additional={additional} />
       ))}
-      <NextStepButton path="" />
+      <NextStepButton callback={() => {}} />
     </div>
   );
 }
