@@ -36,7 +36,7 @@ export default function NewBorderForm() {
     }
 
     toast.success("Borda criada com sucesso");
-    router.push("/border")
+    router.push("/borders")
 
     }catch (err) {
       console.log(err);

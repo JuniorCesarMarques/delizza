@@ -14,7 +14,7 @@ export default function Navbar(){
             {option: "Produto", path: "/product/new"},
             {option: "Categoria", path: "/category/new"},
             {option: "Adicional", path: "/additional/new"},
-            {option: "Borda", path: "/border/new"}
+            {option: "Borda", path: "/borders/new"}
         ]}
 
         ]}

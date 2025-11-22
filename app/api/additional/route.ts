@@ -4,7 +4,15 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   const additionals = await prisma.additional.findMany();
 
-  return NextResponse.json(additionals);
+  const formatedData = additionals.map(additional => {
+    return {
+      ...additional,
+      price: Number(additional.price).toFixed(2)
+    }
+  })
+
+
+  return NextResponse.json(formatedData);
 }
 
 export async function POST(request: Request) {

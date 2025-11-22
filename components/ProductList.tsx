@@ -4,6 +4,8 @@ import { ProductType } from "@/lib/types";
 import ProductCard from "./ProductCard";
 import NextStepButton from "./NextStepButton";
 import { useCart } from "@/context/cart/cartContext";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type ProductListType = {
   products: ProductType[];
@@ -11,7 +13,18 @@ type ProductListType = {
 };
 
 export default function ProductList({ products, category }: ProductListType) {
-  const { items } = useCart();
+  const { items, totalQty } = useCart();
+
+  const router = useRouter();
+
+  const handleNextStep = () => {
+    if(totalQty === 2) {
+      router.push("/borders");
+      return
+    }
+
+    toast.error("Ops! Você ainda precisa escolher a segunda metade.")
+  }
 
   return (
     <div>
@@ -20,15 +33,15 @@ export default function ProductList({ products, category }: ProductListType) {
       <div className="flex items-center gap-2">
         <p>Maximo 2 sabores | Selecionados: </p>{" "}
         <div className="flex items-center gap-2">
-          {items.map((item) => (
-            <span>{item.name}</span>
+          {items.map((item, index) => (
+            <span key={index}>{item.name}</span>
           ))}
         </div>
       </div>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
-      <NextStepButton path="/" />
+      <NextStepButton callback={handleNextStep} />
     </div>
   );
 }

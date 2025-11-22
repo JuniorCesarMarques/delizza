@@ -20,6 +20,8 @@ export default function AdditionalCard({
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
+  console.log(additional.price, "PREÇO")
+
   const formatedPrice = additional.price.includes(".")
     ? additional.price.replace(".", ",")
     : additional.price + ",00";

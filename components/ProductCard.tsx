@@ -17,13 +17,22 @@ import { CartItem } from "@/context/cart/cart.types";
 
 type ProductProps = {
   product: ProductType;
+
 };
 
 export default function ProductCard({ product }: ProductProps) {
   const { setModalProps } = useModal();
 
   const router = useRouter();
-  const { addItem, increaseQty, removeItem, decreaseQty, totalQty, items } = useCart();
+  const {
+    addItem,
+    increaseQty,
+    removeItem,
+    decreaseQty,
+    totalQty,
+    total,
+    items,
+  } = useCart();
 
   const [item, setItem] = useState<CartItem>();
 
@@ -33,7 +42,7 @@ export default function ProductCard({ product }: ProductProps) {
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-  console.log("ESTADO", items);
+  // console.log("ESTADO", items);
 
   const handleDelete = async () => {
     const res = await fetch(`${baseUrl}/api/product/${product.id}`, {
@@ -63,7 +72,7 @@ export default function ProductCard({ product }: ProductProps) {
     }
   };
 
-  console.log(totalQty, "TOTAL QUANTITY")
+console.log("ITEMS", items)
 
   return (
     <div
@@ -76,24 +85,21 @@ export default function ProductCard({ product }: ProductProps) {
         if(item?.id === product.id) {
           removeItem(product.id)
         } else {
-          if(totalQty < 2) {
 
-          if (!item?.quantity) {
+          if(totalQty < 2) {
           addItem({
             id: product.id,
             name: product.name,
             price: Number(product.price) / 2,
-            quantity: 1,
-          });
-        } else {
-          increaseQty(product.id)
+            quantity: 1            
+          })
         }
-
+          
         }
+        
+}}
 
-        }
 
-      }}
     >
       <div>
         <p className="font-bold text-zinc-600">{product.name}</p>
@@ -119,10 +125,9 @@ export default function ProductCard({ product }: ProductProps) {
             <span
               onClick={(e) => {
                 e.stopPropagation();
-                if(totalQty < 2) {
-                   increaseQty(product.id);
+                if (totalQty < 2) {
+                  increaseQty(product.id);
                 }
-               
               }}
               className="text-4xl text-green-500"
             >

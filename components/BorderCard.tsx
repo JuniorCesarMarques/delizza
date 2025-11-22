@@ -5,11 +5,14 @@ import { useModal } from "@/app/contexts/ModalContext";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useCart } from "@/context/cart/cartContext";
 
 export default function BorderCard({ border }: { border: Border }) {
   const { setModalProps } = useModal();
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const { addItem, items } = useCart();
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -56,8 +59,17 @@ export default function BorderCard({ border }: { border: Border }) {
     }
   };
 
+  console.log(items)
+
   return (
-    <div className="w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition">
+    <div onClick={() => {
+      addItem({
+        id: border.id,
+        name: border.name,
+        price: Number(border.price),
+        quantity: 1
+      })
+    }} className={`w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition`}>
       <div className="absolute top-0 right-2">
         <DropdownMenu
           handleClick={handleMenuClick}
