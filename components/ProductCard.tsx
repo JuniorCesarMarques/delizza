@@ -5,13 +5,15 @@ import Image from "next/image";
 
 import DropdownMenu from "./antd/DropdownMenu";
 
-import Link from "next/link";
 import toast from "react-hot-toast";
 
 import { useModal } from "@/app/contexts/ModalContext";
+import { useCart } from "@/context/cart/cartContext";
 
 import { useRouter } from "next/navigation";
 import { MenuProps } from "antd";
+import { useEffect, useState } from "react";
+import { CartItem } from "@/context/cart/cart.types";
 
 type ProductProps = {
   product: ProductType;
@@ -21,8 +23,17 @@ export default function ProductCard({ product }: ProductProps) {
   const { setModalProps } = useModal();
 
   const router = useRouter();
+  const { addItem, increaseQty, removeItem, decreaseQty, totalQty, items } = useCart();
+
+  const [item, setItem] = useState<CartItem>();
+
+  useEffect(() => {
+    setItem(items.find((item) => item.id === product.id));
+  }, [items]);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+  console.log("ESTADO", items);
 
   const handleDelete = async () => {
     const res = await fetch(`${baseUrl}/api/product/${product.id}`, {
@@ -48,30 +59,87 @@ export default function ProductCard({ product }: ProductProps) {
     }
 
     if (e.key === "edit") {
-      router.push(`/product/edit/${product.id}`)
+      router.push(`/product/edit/${product.id}`);
     }
   };
+
+  console.log(totalQty, "TOTAL QUANTITY")
 
   return (
     <div
       key={product.id}
-      className="flex items-center relative justify-between border p-4 gap-2 max-w-150"
+      className={`${
+        items.some((item) => item.id === product.id) && "border-blue-500"
+      } flex items-center relative justify-between border p-4 gap-2 max-w-150`}
+      onClick={() => {
+
+        if(item?.id === product.id) {
+          removeItem(product.id)
+        } else {
+          if(totalQty < 2) {
+
+          if (!item?.quantity) {
+          addItem({
+            id: product.id,
+            name: product.name,
+            price: Number(product.price) / 2,
+            quantity: 1,
+          });
+        } else {
+          increaseQty(product.id)
+        }
+
+        }
+
+        }
+
+      }}
     >
-      <Link href={`/product/${product.id}`}>
-        <div>
-          <p className="font-bold text-zinc-600">{product.name}</p>
-          <p className="text-zinc-600">{product.description}</p>
-          <p className="font-bold text-zinc-800">
-            R${product.price.replace(".", ",")}
-          </p>
-        </div>
-        <Image
-          src={product.imageUrl || "/sem-foto.png"}
-          width={100}
-          height={100}
-          alt=""
-        />
-      </Link>
+      <div>
+        <p className="font-bold text-zinc-600">{product.name}</p>
+        <p className="text-zinc-600">{product.description}</p>
+        <p className="font-bold text-zinc-800">
+          R${product.price.replace(".", ",")}
+        </p>
+      </div>
+
+      <div className="flex items-center">
+        {item?.quantity ? (
+          <div className="flex items-center gap-1">
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                decreaseQty(product.id);
+              }}
+              className="text-4xl text-red-500"
+            >
+              -
+            </span>
+            <span className="text-2xl">{item.quantity}</span>
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                if(totalQty < 2) {
+                   increaseQty(product.id);
+                }
+               
+              }}
+              className="text-4xl text-green-500"
+            >
+              +
+            </span>
+          </div>
+        ) : (
+          <span className="text-4xl text-green-500">+</span>
+        )}
+      </div>
+
+      <Image
+        src={product.imageUrl || "/sem-foto.png"}
+        width={100}
+        height={100}
+        alt=""
+      />
       <DropdownMenu
         handleClick={handleMenuClick}
         items={[

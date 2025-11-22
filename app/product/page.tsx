@@ -14,5 +14,5 @@ export default async function Product({
   const res = await fetch(`${baseUrl}/api/product?category=${category}`);
   const data = await res.json();
 
-  return <ProductList products={data} />;
+  return <ProductList products={data} category={category} />;
 }

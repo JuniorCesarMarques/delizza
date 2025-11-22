@@ -9,6 +9,7 @@ import ModalProvider from "@/app/contexts/ModalContext";
 import Modal from "@/components/Modal";
 
 import ReactQueryProvider from "@/app/providers/ReactQueryProvider";
+import { CartProvider } from "@/context/cart/cartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,17 +37,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReactQueryProvider>
-          <ModalProvider>
-            <Header />
-            <div className="py-[80px]">
-              {children}
-              <Toaster position="top-right" />
-            </div>
-            <Modal />
-            <Navbar />
-          </ModalProvider>
-        </ReactQueryProvider>
+        <CartProvider>
+          <ReactQueryProvider>
+            <ModalProvider>
+              <Header />
+              <div className="py-[80px]">
+                {children}
+                <Toaster position="top-right" />
+              </div>
+              <Modal />
+              <Navbar />
+            </ModalProvider>
+          </ReactQueryProvider>
+        </CartProvider>
       </body>
     </html>
   );
