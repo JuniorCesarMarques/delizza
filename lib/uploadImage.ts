@@ -14,7 +14,7 @@ export async function uploadImage(file: File, id?: string) {
   }
 
   const newFileName = `${Date.now()}-${file.name}`;
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("delizza") // nome do bucket no supabase
     .upload(newFileName, file);
 
