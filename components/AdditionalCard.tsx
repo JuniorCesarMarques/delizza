@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCart } from "@/context/cart/cartContext";
 
 export default function AdditionalCard({
   additional,
@@ -17,6 +18,11 @@ export default function AdditionalCard({
   const router = useRouter();
   const queryClient = useQueryClient();
   const { setModalProps } = useModal();
+
+  const { items, addItem, removeItem } = useCart();
+
+  const additionals = items.filter(i => i.type === "additional");
+
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -66,7 +72,26 @@ export default function AdditionalCard({
   };
 
   return (
-    <div className="w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition">
+    <div onClick={() => {
+
+      const current = additionals[0];
+
+      removeItem(additional.id);
+
+      if (!current || current.id !== additional.id) {
+          addItem({
+            id: additional.id,
+            name: additional.name,
+            price: Number(additional.price),
+            quantity: 1,
+            type: "additional",
+          });
+        }
+      
+
+    }} className={`${
+        additionals.find((b) => b.id === additional.id) ? "border-blue-500" : ""
+      } w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition`}>
       <div className="absolute top-0 right-2">
         <DropdownMenu
           handleClick={handleMenuClick}

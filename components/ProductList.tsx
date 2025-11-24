@@ -13,12 +13,15 @@ type ProductListType = {
 };
 
 export default function ProductList({ products, category }: ProductListType) {
-  const { items, totalQty } = useCart();
+  const { items } = useCart();
+
+  const pizzas = items.filter(item => item.type === "pizza");
+  const qtyPizzas = pizzas.reduce((acc, p) => acc + p.quantity, 0);
 
   const router = useRouter();
 
   const handleNextStep = () => {
-    if(totalQty === 2) {
+    if(qtyPizzas === 2) {
       router.push("/borders");
       return
     }
@@ -28,14 +31,16 @@ export default function ProductList({ products, category }: ProductListType) {
 
   return (
     <div>
-      <h1>{category}</h1>
-      <p className="font-bold text-3xl">Escolha o seu sabor preferido</p>
-      <div className="flex items-center gap-2">
-        <p>Maximo 2 sabores | Selecionados: </p>{" "}
+      <div className="fixed top-20 bg-white z-10 w-full p-2">
+        <h1>{category}</h1>
+        <p className="font-bold text-3xl">Escolha o seu sabor preferido</p>
         <div className="flex items-center gap-2">
-          {items.map((item, index) => (
-            <span key={index}>{item.name}</span>
-          ))}
+          <p>Maximo 2 sabores | Selecionados: </p>{" "}
+          <div className="flex items-center gap-2">
+            {items.map((item, index) => (
+              <span key={index}>{item.name}</span>
+            ))}
+          </div>
         </div>
       </div>
       {products.map((product) => (

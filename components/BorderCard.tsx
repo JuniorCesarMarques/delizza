@@ -12,7 +12,11 @@ export default function BorderCard({ border }: { border: Border }) {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { addItem, items } = useCart();
+  const { addItem, items, removeItem } = useCart();
+
+  const borders = items.filter((item) => item.type === "border");
+
+  const qtyBorders = borders.reduce((acc, border) => border.quantity + acc, 0);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -59,17 +63,27 @@ export default function BorderCard({ border }: { border: Border }) {
     }
   };
 
-  console.log(items)
-
   return (
-    <div onClick={() => {
-      addItem({
-        id: border.id,
-        name: border.name,
-        price: Number(border.price),
-        quantity: 1
-      })
-    }} className={`w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition`}>
+    <div
+      onClick={() => {
+        const current = borders[0]; 
+
+        removeItem(current?.id);
+
+        if (!current || current.id !== border.id) {
+          addItem({
+            id: border.id,
+            name: border.name,
+            price: Number(border.price),
+            quantity: 1,
+            type: "border",
+          });
+        }
+      }}
+      className={`${
+        borders.find((b) => b.id === border.id) ? "border-blue-500" : ""
+      } w-60 rounded-xl p-5 border relative flex shadow flex-col gap-1 hover:shadow-md transition`}
+    >
       <div className="absolute top-0 right-2">
         <DropdownMenu
           handleClick={handleMenuClick}

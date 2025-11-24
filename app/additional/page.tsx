@@ -4,8 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import AdditionalCard from "@/components/AdditionalCard";
 import { Additional } from "@/lib/types";
 import NextStepButton from "@/components/NextStepButton";
+import { useRouter } from "next/navigation";
 
 export default function AdditionalsPage() {
+
+  const router = useRouter();
+
   const fetcher = async () => {
     const res = await fetch(`/api/additional`, { cache: "no-store" });
 
@@ -23,7 +27,9 @@ export default function AdditionalsPage() {
 
   if (isLoading) return <span>Carregando...</span>;
 
-  console.log(additionals, "ADDITIONAIS")
+  const handleNextStep = () => {
+    router.push("/drinks");
+  }
 
   return (
     <div className="flex flex-col items-center">
@@ -31,7 +37,7 @@ export default function AdditionalsPage() {
       {additionals?.map((additional) => (
         <AdditionalCard key={additional.id} additional={additional} />
       ))}
-      <NextStepButton callback={() => {}} />
+      <NextStepButton callback={handleNextStep} />
     </div>
   );
 }

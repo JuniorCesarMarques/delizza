@@ -5,6 +5,7 @@ export type CartAction =
   | { type: "REMOVE_ITEM"; payload: { id: string } }
   | { type: "INCREASE_QTY"; payload: { id: string } }
   | { type: "DECREASE_QTY"; payload: { id: string } }
+  | { type: "SET_CART"; payload: { id: string }}
   | { type: "CLEAR_CART" };
 
 export const cartInitialState: CartState = {
@@ -54,6 +55,8 @@ export function cartReducer(
     case "CLEAR_CART":
       return cartInitialState;
 
+      case "SET_CART":
+        return {...state}
     default:
       return state;
   }

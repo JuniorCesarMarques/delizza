@@ -1,3 +1,4 @@
+import DrinksList from "@/components/DrinksList";
 import ProductList from "@/components/ProductList";
 
 export default async function Product({
@@ -14,5 +15,9 @@ export default async function Product({
   const res = await fetch(`${baseUrl}/api/product?category=${category}`);
   const data = await res.json();
 
-  return <ProductList products={data} category={category} />;
+  if(category !== "Bebidas") {
+    return <ProductList products={data} category={category} />;
+  }
+
+  return <DrinksList products={data} />
 }

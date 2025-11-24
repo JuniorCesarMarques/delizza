@@ -41,7 +41,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <ModalProvider>
               <Header />
-              <div className="pt-20 pb-40">
+              <div className="py-40">
                 {children}
                 <Toaster position="top-right" />
               </div>

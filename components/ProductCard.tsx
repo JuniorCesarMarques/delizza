@@ -20,6 +20,7 @@ type ProductProps = {
 
 };
 
+
 export default function ProductCard({ product }: ProductProps) {
   const { setModalProps } = useModal();
 
@@ -29,8 +30,6 @@ export default function ProductCard({ product }: ProductProps) {
     increaseQty,
     removeItem,
     decreaseQty,
-    totalQty,
-    total,
     items,
   } = useCart();
 
@@ -41,6 +40,10 @@ export default function ProductCard({ product }: ProductProps) {
   }, [items]);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+  const pizzas = items.filter(item => item.type === "pizza");
+
+  const qtyPizzas = pizzas.reduce((acc, pizza) => pizza.quantity + acc, 0);
 
   // console.log("ESTADO", items);
 
@@ -72,7 +75,8 @@ export default function ProductCard({ product }: ProductProps) {
     }
   };
 
-console.log("ITEMS", items)
+console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas)
+
 
   return (
     <div
@@ -86,19 +90,18 @@ console.log("ITEMS", items)
           removeItem(product.id)
         } else {
 
-          if(totalQty < 2) {
+          if(qtyPizzas < 2) {
           addItem({
             id: product.id,
             name: product.name,
             price: Number(product.price) / 2,
-            quantity: 1            
+            quantity: 1,
+            type: "pizza"           
           })
         }
           
         }
-        
 }}
-
 
     >
       <div>
@@ -125,7 +128,7 @@ console.log("ITEMS", items)
             <span
               onClick={(e) => {
                 e.stopPropagation();
-                if (totalQty < 2) {
+                if (qtyPizzas < 2) {
                   increaseQty(product.id);
                 }
               }}

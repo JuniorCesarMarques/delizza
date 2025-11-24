@@ -3,6 +3,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  type: "pizza" | "border" | "additional" | "drink"
   details?: any; // borda, adicionais, meia-meia etc.
 }
 
