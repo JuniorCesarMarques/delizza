@@ -16,4 +16,4 @@ export async function DELETE(
   });
 
   return NextResponse.json({message: "Borda excluida com sucesso"}, {status: 200});
-}
+};
