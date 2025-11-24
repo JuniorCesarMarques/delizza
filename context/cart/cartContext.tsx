@@ -25,10 +25,8 @@ interface CartContextProps {
 const CartContext = createContext<CartContextProps | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, cartInitialState, () => {
-  const stored = localStorage.getItem("cart");
-  return stored ? JSON.parse(stored) : cartInitialState;
-});
+  const [state, dispatch] = useReducer(cartReducer, cartInitialState)
+
 
   const addItem = (item: CartItem) =>
     dispatch({ type: "ADD_ITEM", payload: item });
