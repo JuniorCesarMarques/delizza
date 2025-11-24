@@ -16,12 +16,9 @@ export default function CheckoutPage() {
 
   console.log(items, "ITEMS")
   const border = items.find(i => i.type === "border");
-  const additionals = items.filter(a => a.type === "additional");
-  const drinks = items.filter(d => d.type === "drink");
   const pizza = items.filter(i => i.type === "pizza");
   const pizzaPrice = getPizzaPrice(items);
 
-  const halfQty = pizza.length;
 
 
   const totalPrice = getTotalPrice(items);
@@ -36,8 +33,8 @@ export default function CheckoutPage() {
 
             <div className="flex items-center gap-2">
             <p className="font-bold">Pizza:</p>
-              {pizza.map(p => (
-                <span>Meia {p.name}</span>
+              {pizza.map((p, i) => (
+                <span key={i}>Meia {p.name}</span>
               ))}
               <span className="font-bold text-green-700">R$ {pizzaPrice}</span>
             </div>
