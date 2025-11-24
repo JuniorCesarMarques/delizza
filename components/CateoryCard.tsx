@@ -85,7 +85,7 @@ const { mutate: deleteCategory } = useMutation({
       <Link href={`/product?category=${category.name}`}>
         <div className="w-50 h-50 overflow-hidden">
           <Image
-            src={category.imageUrl}
+            src={category.imageUrl ? category.imageUrl : "/sem-foto.png"}
             width={200}
             height={200}
             alt="Picture of the author"

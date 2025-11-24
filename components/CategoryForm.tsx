@@ -54,6 +54,8 @@ export default function CategoryForm({
     setValue("imageUrl", null);
   };
 
+  console.log(watch("imageUrl"));
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

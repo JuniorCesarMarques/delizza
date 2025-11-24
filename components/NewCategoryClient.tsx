@@ -19,11 +19,6 @@ export default function NewCategoryClient() {
 
       console.log("IMAGE URL", imageUrl);
 
-      if (!imageUrl) {
-        toast.error("Falha ao enviar a imagem. Tente novamente.");
-        return;
-      }
-
 
       const res = await fetch(`/api/category`, {
         method: "POST",
