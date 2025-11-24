@@ -6,5 +6,5 @@ export default function newAdditionalPage() {
       <h1 className="font-bold">Novo adicional</h1>
       <NewAdditional />
     </div>
-  );
+  )
 }
