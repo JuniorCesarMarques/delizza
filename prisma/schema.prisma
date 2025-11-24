@@ -18,7 +18,7 @@ model Product {
   id          String              @id @default(cuid())
   name        String
   description String?
-  price       Decimal @db.Decimal(10, 2)
+  price       Decimal             @db.Decimal(10, 2)
   categoryId  String
   imageUrl    String?
   category    Category            @relation(fields: [categoryId], references: [id])
@@ -27,19 +27,19 @@ model Product {
 }
 
 model Additional {
-  id               String     @id @default(cuid())
+  id               String                @id @default(cuid())
   name             String
-  price            Decimal    @db.Decimal(10,2)
+  price            Decimal               @db.Decimal(10, 2)
   products         ProductAdditional[]
   orderAdditionals OrderItemAdditional[]
 }
 
 model Border {
-  id          String  @id @default(cuid())
-  name        String
-  price       Decimal @db.Decimal(10,2) 
-  products    ProductBorder[]
-  orderItems  OrderItem[] 
+  id         String          @id @default(cuid())
+  name       String
+  price      Decimal         @db.Decimal(10, 2)
+  products   ProductBorder[]
+  orderItems OrderItem[]
 }
 
 model ProductBorder {
@@ -63,22 +63,22 @@ model ProductAdditional {
 }
 
 model OrderItem {
-  id          String         @id @default(cuid())
+  id          String                @id @default(cuid())
   orderId     String
   productId   String
-  borderId    String?  
+  borderId    String?
   quantity    Int
-  basePrice   Decimal         @db.Decimal(10,2)
-  totalPrice  Decimal         @db.Decimal(10,2)
+  basePrice   Decimal               @db.Decimal(10, 2)
+  totalPrice  Decimal               @db.Decimal(10, 2)
   additionals OrderItemAdditional[]
-  border      Border?         @relation(fields: [borderId], references: [id])
+  border      Border?               @relation(fields: [borderId], references: [id])
 }
 
 model OrderItemAdditional {
-  id            String     @id @default(cuid())
-  orderItemId   String
-  additionalId  String
-  price         Decimal    @db.Decimal(10,2)
-  additional    Additional @relation(fields: [additionalId], references: [id])
-  orderItem     OrderItem  @relation(fields: [orderItemId], references: [id])
+  id           String     @id @default(cuid())
+  orderItemId  String
+  additionalId String
+  price        Decimal    @db.Decimal(10, 2)
+  additional   Additional @relation(fields: [additionalId], references: [id])
+  orderItem    OrderItem  @relation(fields: [orderItemId], references: [id])
 }

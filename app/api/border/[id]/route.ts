@@ -15,5 +15,5 @@ export async function DELETE(
     where: { id },
   });
 
-  return NextResponse.json({message: "Borda excluida com sucesso"}, {status: 200});
+  return NextResponse.json({message: "Borda excluida com sucesso"}, {status: 200})
 }
