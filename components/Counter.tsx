@@ -3,20 +3,18 @@ import { useCart } from "@/context/cart/cartContext";
 
 type CounterProps = {
   increaseRule: boolean;
-  quantity: number | undefined;
   item: CartItem | undefined
 };
 
 export default function Counter({
   increaseRule,
-  quantity,
   item,
 }: CounterProps) {
   const { decreaseQty, increaseQty } = useCart();
 
   return (
     <div className="flex items-center">
-      {quantity ? (
+      {item?.quantity ? (
         <div className="flex items-center gap-1">
           <span
             onClick={(e) => {
@@ -27,7 +25,7 @@ export default function Counter({
           >
             -
           </span>
-          <span className="text-2xl">{quantity}</span>
+          <span className="text-2xl">{item?.quantity}</span>
           <span
             onClick={(e) => {
               e.stopPropagation();

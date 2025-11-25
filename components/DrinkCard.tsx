@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCart } from "@/context/cart/cartContext";
 import Image from "next/image";
+import Counter from "./Counter";
 
 export default function DrinkCard({ drink }: { drink: ProductType }) {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function DrinkCard({ drink }: { drink: ProductType }) {
   const { items, addItem, removeItem } = useCart();
 
   const drinks = items.filter((i) => i.type === "drink");
+  const actualDrink = drinks.find(d => d.id === drink.id);
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -70,23 +72,24 @@ export default function DrinkCard({ drink }: { drink: ProductType }) {
   return (
     <div
       onClick={() => {
-        const current = drinks[0];
 
-        removeItem(drink.id);
+      
+        if (drinks.find(d => d.id === drink.id)) {
+          removeItem(drink.id);
+          return
+        }
 
-        if (!current || current.id !== drink.id) {
-          addItem({
+        addItem({
             id: drink.id,
             name: drink.name,
             price: Number(drink.price),
             quantity: 1,
             type: "drink",
           });
-        }
       }}
       className={`${
         drinks.find((b) => b.id === drink.id) ? "border-blue-500" : ""
-      } w-90 border rounded-xl p-3 shadow-sm bg-white relative flex items-center justify-between gap-3 hover:shadow-md transition`}
+      } w-90 border rounded-xl p-2 shadow-sm bg-white relative flex items-center justify-between gap-3 hover:shadow-md transition`}
     >
       {/* <div className="absolute top-0 right-2">
         <DropdownMenu
@@ -99,6 +102,7 @@ export default function DrinkCard({ drink }: { drink: ProductType }) {
       </div> */}
 
       <span className="font-semibold text-gray-800 truncate">{drink.name}</span>
+      <Counter increaseRule={true} item={actualDrink} />
       <div className="flex items-center gap-2">
         <span className="font-bold text-green-600">R$ {formatedPrice}</span>
         <Image

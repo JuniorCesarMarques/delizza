@@ -18,21 +18,13 @@ import Counter from "./Counter";
 
 type ProductProps = {
   product: ProductType;
-
 };
-
 
 export default function ProductCard({ product }: ProductProps) {
   const { setModalProps } = useModal();
 
   const router = useRouter();
-  const {
-    addItem,
-    increaseQty,
-    removeItem,
-    decreaseQty,
-    items,
-  } = useCart();
+  const { addItem, increaseQty, removeItem, decreaseQty, items } = useCart();
 
   const [item, setItem] = useState<CartItem>();
 
@@ -42,7 +34,7 @@ export default function ProductCard({ product }: ProductProps) {
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-  const pizzas = items.filter(item => item.type === "pizza");
+  const pizzas = items.filter((item) => item.type === "pizza");
 
   const qtyPizzas = pizzas.reduce((acc, pizza) => pizza.quantity + acc, 0);
 
@@ -76,8 +68,7 @@ export default function ProductCard({ product }: ProductProps) {
     }
   };
 
-console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas)
-
+  console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas);
 
   return (
     <div
@@ -87,23 +78,20 @@ console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas)
       } flex items-center relative justify-between border p-4 gap-2 max-w-150`}
       onClick={() => {
 
-        if(item?.id === product.id) {
-          removeItem(product.id)
+        if (item?.id === product.id) {
+          removeItem(product.id);
         } else {
-
-          if(qtyPizzas < 2) {
-          addItem({
-            id: product.id,
-            name: product.name,
-            price: Number(product.price) / 2,
-            quantity: 1,
-            type: "pizza"           
-          })
+          if (qtyPizzas < 2) {
+            addItem({
+              id: product.id,
+              name: product.name,
+              price: Number(product.price) / 2,
+              quantity: 1,
+              type: "pizza",
+            });
+          }
         }
-          
-        }
-}}
-
+      }}
     >
       <div>
         <p className="font-bold text-zinc-600">{product.name}</p>
@@ -113,7 +101,11 @@ console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas)
         </p>
       </div>
 
-      <Counter increaseRule={qtyPizzas < 2} item={item} quantity={item?.quantity} />
+      <Counter
+        increaseRule={qtyPizzas < 2}
+        item={item}
+        quantity={item?.quantity}
+      />
 
       <Image
         src={product.imageUrl || "/sem-foto.png"}

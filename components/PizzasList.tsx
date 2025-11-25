@@ -26,7 +26,12 @@ export default function PizzasList({ products, category }: ProductListType) {
       return
     }
 
-    toast.error("Selecione a segunda metade da pizza. 🍕")
+    if(qtyPizzas === 1) {
+      toast.error("Selecione a segunda metade da pizza.");
+      return
+    }
+
+    toast.error("Selecione algum sabor");
   }
 
   return (

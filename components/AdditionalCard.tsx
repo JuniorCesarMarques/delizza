@@ -26,7 +26,6 @@ export default function AdditionalCard({
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  console.log(additional.price, "PREÇO")
 
   const formatedPrice = additional.price.includes(".")
     ? additional.price.replace(".", ",")
@@ -74,11 +73,10 @@ export default function AdditionalCard({
   return (
     <div onClick={() => {
 
-      const current = additionals[0];
-
-      removeItem(additional.id);
-
-      if (!current || current.id !== additional.id) {
+      if (additionals.find(a => a.id === additional.id)) {
+          removeItem(additional.id);
+          
+        } else {
           addItem({
             id: additional.id,
             name: additional.name,
@@ -87,7 +85,6 @@ export default function AdditionalCard({
             type: "additional",
           });
         }
-      
 
     }} className={`${
         additionals.find((b) => b.id === additional.id) ? "border-blue-500" : ""
