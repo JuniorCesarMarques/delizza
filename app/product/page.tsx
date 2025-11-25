@@ -1,5 +1,5 @@
 import DrinksList from "@/components/DrinksList";
-import ProductList from "@/components/ProductList";
+import PizzasList from "@/components/PizzasList";
 
 export default async function Product({
   searchParams,
@@ -14,7 +14,7 @@ export default async function Product({
   const data = await res.json();
 
   if (category !== "Bebidas") {
-    return <ProductList products={data} category={category} />;
+    return <PizzasList products={data} category={category} />;
   }
 
   return <DrinksList />;

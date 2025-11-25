@@ -12,7 +12,7 @@ type ProductListType = {
   category: string | string[] | undefined;
 };
 
-export default function ProductList({ products, category }: ProductListType) {
+export default function PizzasList({ products, category }: ProductListType) {
   const { items } = useCart();
 
   const pizzas = items.filter(item => item.type === "pizza");
@@ -26,7 +26,7 @@ export default function ProductList({ products, category }: ProductListType) {
       return
     }
 
-    toast.error("Ops! Você ainda precisa escolher a segunda metade.")
+    toast.error("Selecione a segunda metade da pizza. 🍕")
   }
 
   return (
