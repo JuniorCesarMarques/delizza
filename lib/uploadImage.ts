@@ -6,9 +6,7 @@ export async function uploadImage(file: File, id?: string) {
 
   // Caso for uma string do banco retorna ela mesmo
   if (typeof file === "string") return file;
-
-  // Caso não passe uma imagem na criação de categoria
-  if(!file.name) return null;
+  if (!file.name) return null;
 
 
   if(id) {

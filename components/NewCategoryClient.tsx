@@ -14,7 +14,6 @@ export default function NewCategoryClient() {
   const onSubmit: SubmitHandler<CategorySchema> = async (data) => {
     try {
 
-      console.log(data)
       const imageUrl = await uploadImage(data.imageUrl as File);
 
       console.log("IMAGE URL", imageUrl);

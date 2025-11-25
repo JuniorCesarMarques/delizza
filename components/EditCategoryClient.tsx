@@ -17,11 +17,6 @@ export default function EditCategoryClient({id, category}: {id: string, category
      try {
           const imageUrl = await uploadImage((data.imageUrl), id);
     
-          if (!imageUrl) {
-            toast.error("Falha ao enviar a imagem. Tente novamente.");
-            return;
-          }
-    
           const res = await fetch(`/api/category/${id}`, {
             method: "PATCH",
             headers: {
