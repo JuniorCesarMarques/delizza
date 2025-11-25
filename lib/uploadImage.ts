@@ -4,9 +4,12 @@ export async function uploadImage(file: File, id?: string) {
 
   console.log("FILE", file)
 
+  if(!file) return null;
+  if (!file.name) return null;
+
   // Caso for uma string do banco retorna ela mesmo
   if (typeof file === "string") return file;
-  if (!file.name) return null;
+
 
 
   if(id) {
