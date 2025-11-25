@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { MenuProps } from "antd";
 import { useEffect, useState } from "react";
 import { CartItem } from "@/context/cart/cart.types";
+import Counter from "./Counter";
 
 type ProductProps = {
   product: ProductType;
@@ -112,40 +113,12 @@ console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas)
         </p>
       </div>
 
-      <div className="flex items-center">
-        {item?.quantity ? (
-          <div className="flex items-center gap-1">
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-                decreaseQty(product.id);
-              }}
-              className="text-4xl text-red-500"
-            >
-              -
-            </span>
-            <span className="text-2xl">{item.quantity}</span>
-            <span
-              onClick={(e) => {
-                e.stopPropagation();
-                if (qtyPizzas < 2) {
-                  increaseQty(product.id);
-                }
-              }}
-              className="text-4xl text-green-500"
-            >
-              +
-            </span>
-          </div>
-        ) : (
-          <span className="text-4xl text-green-500">+</span>
-        )}
-      </div>
+      <Counter increaseRule={qtyPizzas < 2} item={item} quantity={item?.quantity} />
 
       <Image
         src={product.imageUrl || "/sem-foto.png"}
-        width={100}
-        height={100}
+        width={70}
+        height={70}
         alt=""
       />
       <DropdownMenu

@@ -31,14 +31,14 @@ export default function PizzasList({ products, category }: ProductListType) {
 
   return (
     <div>
-      <div className="fixed top-20 bg-white z-10 w-full p-2">
+      <div className="fixed top-15 bg-white z-10 w-full p-2">
         <h1>{category}</h1>
-        <p className="font-bold text-3xl">Escolha o seu sabor preferido</p>
+        <p className="font-bold text-2xl">Escolha o seu sabor preferido</p>
         <div className="flex items-center gap-2">
-          <p>Maximo 2 sabores | Selecionados: </p>{" "}
+          <p className="font-bold">Sabores: </p>{" "}
           <div className="flex items-center gap-2">
             {items.map((item, index) => (
-              <span key={index}>{item.name}</span>
+              <span className="p-1 bg-black text-white font-bold text-sm" key={index}>{item.name}</span>
             ))}
           </div>
         </div>
