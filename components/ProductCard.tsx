@@ -104,7 +104,6 @@ export default function ProductCard({ product }: ProductProps) {
       <Counter
         increaseRule={qtyPizzas < 2}
         item={item}
-        quantity={item?.quantity}
       />
 
       <Image
