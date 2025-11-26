@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 
 export default function CheckoutForm() {
-  const { register, handleSubmit } = useForm();
 
   useEffect(() => {
     // Disponibiliza a integração somente depois que o script carregou
@@ -49,7 +47,7 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="form-checkout" onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form id="form-checkout"  className="space-y-4">
 
       <input id="form-checkout__cardNumber" placeholder="Número do cartão" className="border p-2 w-full" />
 
@@ -71,7 +69,7 @@ export default function CheckoutForm() {
 
       <select id="form-checkout__installments" className="border p-2 w-full"></select>
 
-      <button className="bg-black text-white px-4 py-2 rounded">
+      <button onClick={onSubmit} className="bg-black text-white px-4 py-2 rounded">
         Pagar
       </button>
     </form>
