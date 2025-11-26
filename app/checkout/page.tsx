@@ -8,18 +8,42 @@ export default function CheckoutPage() {
   const { items, total, clearCart } = useCart();
   const router = useRouter();
 
-  const handleConfirm = () => {
-    // FUTURO: enviar para API ou WhatsApp
-    clearCart();
-    router.push("/success");
+  const mpItems = items.map((i) => ({
+    id: i.id,
+    title: i.name,
+    quantity: i.quantity,
+    unit_price: Number(i.price),
+  }));
+
+  const handleConfirm = async () => {
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mpItems,
+          total: totalPrice,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("ERRO AO CRIAR PEDIDO", data);
+        return;
+      }
+
+      // ⬇ redirecionar para pagamento
+      router.push(`/checkout/payment?orderId=${data.orderId}`);
+    } catch (err) {
+      console.error("ERRO", err);
+    }
   };
 
-  console.log(items, "ITEMS")
-  const border = items.find(i => i.type === "border");
-  const pizza = items.filter(i => i.type === "pizza");
+  console.log(items, "ITEMS");
+  const border = items.find((i) => i.type === "border");
+  const pizza = items.filter((i) => i.type === "pizza");
   const pizzaPrice = getPizzaPrice(items);
-
-
 
   const totalPrice = getTotalPrice(items);
 
@@ -30,30 +54,26 @@ export default function CheckoutPage() {
       <div className="p-3 border rounded">
         {pizza.length > 1 ? (
           <div className="fle flex-col items-baseline">
-
             <div className="flex items-center gap-2">
-            <p className="font-bold">Pizza:</p>
+              <p className="font-bold">Pizza:</p>
               {pizza.map((p, i) => (
                 <span key={i}>Meia {p.name}</span>
               ))}
               <span className="font-bold text-green-700">R$ {pizzaPrice}</span>
             </div>
 
-
-              {border && (
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold">Borda:</span>
-                    <span>{border.name}</span>
-                    <span>{border.price}</span>
-                  </div>
-                )}
+            {border && (
+              <div className="flex items-center gap-2">
+                <span className="font-bold">Borda:</span>
+                <span>{border.name}</span>
+                <span>{border.price}</span>
+              </div>
+            )}
           </div>
         ) : (
           <span></span>
         )}
       </div>
-      
- 
 
       <div className="text-xl font-bold mt-8 text-right">
         Total: R$ {totalPrice}

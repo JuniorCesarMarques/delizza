@@ -9,7 +9,7 @@ export type CartAction =
   | { type: "CLEAR_CART" };
 
 export const cartInitialState: CartState = {
-  items: [],
+  items: JSON.parse(localStorage.getItem("cart") as string).items,
 };
 
 export function cartReducer(

@@ -62,6 +62,19 @@ model ProductAdditional {
   @@unique([productId, additionalId])
 }
 
+model Order {
+  id        String      @id @default(cuid())
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model OrderItem {
   id          String                @id @default(cuid())
   orderId     String
@@ -72,6 +85,7 @@ model OrderItem {
   totalPrice  Decimal               @db.Decimal(10, 2)
   additionals OrderItemAdditional[]
   border      Border?               @relation(fields: [borderId], references: [id])
+  Order       Order                 @relation(fields: [orderId], references: [id])
 }
 
 model OrderItemAdditional {
