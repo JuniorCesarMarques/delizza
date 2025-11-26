@@ -42,7 +42,7 @@ export default function CheckoutForm() {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = window.cardForm.getCardFormData();
+    const data = window.cardForm?.getCardFormData();
     console.log("DADOS PARA O BACKEND:", data);
 
     // backend:

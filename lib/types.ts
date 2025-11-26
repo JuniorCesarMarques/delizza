@@ -49,15 +49,23 @@ export type Border = {
   price: string;
 };
 
+interface CardFormInstance {
+  submit: () => void;
+  getCardFormData: () => any; // ou mais específico depois
+  // adicione outros métodos que você usa
+}
+
 interface MercadoPagoConstructor {
-  new (publicKey: string, options?: { locale?: string }): any;
+  new (publicKey: string, options?: { locale?: string }): any; // retorna instância do MercadoPago
+  cardForm: (options: object) => CardFormInstance;
 }
 
 declare global {
   interface Window {
     MercadoPago?: MercadoPagoConstructor;
-    cardForm?: any;
+    cardForm?: CardFormInstance; // guarda a instância criada, se quiser
   }
 }
+
 
 
