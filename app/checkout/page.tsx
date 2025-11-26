@@ -1,12 +1,17 @@
 "use client";
 
+import DeliveryCalculator from "@/components/DeliveryCalculator";
+import UseLocation from "@/components/UseLocation";
 import { useCart } from "@/context/cart/cartContext";
 import { getPizzaPrice, getTotalPrice } from "@/utils/itemHooks";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CheckoutPage() {
-  const { items, total, clearCart } = useCart();
+  const { items } = useCart();
   const router = useRouter();
+
+    const [deliveryFee, setDeliveryFee] = useState(0);
 
   const mpItems = items.map((i) => ({
     id: i.id,
@@ -74,7 +79,7 @@ export default function CheckoutPage() {
           <span></span>
         )}
       </div>
-
+      <DeliveryCalculator onFeeCalculated={(fee) => setDeliveryFee(fee)} />
       <div className="text-xl font-bold mt-8 text-right">
         Total: R$ {totalPrice}
       </div>

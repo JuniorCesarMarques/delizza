@@ -10,6 +10,7 @@ import Modal from "@/components/Modal";
 
 import ReactQueryProvider from "@/app/providers/ReactQueryProvider";
 import { CartProvider } from "@/context/cart/cartContext";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
               <div className="py-40">
                 {children}
                 <Toaster position="top-right" />
+                <Script src="https://sdk.mercadopago.com/js/v2" strategy="afterInteractive" />
               </div>
               <Modal />
               <Navbar />

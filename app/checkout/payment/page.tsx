@@ -1,8 +1,13 @@
 "use client";
 
+import { useCart } from "@/context/cart/cartContext";
 import { useEffect } from "react";
 
 export default function CheckoutForm() {
+
+  const { total } = useCart();
+  let cardForm: any = null;
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if (typeof window !== "undefined" && window.MercadoPago) {
@@ -14,7 +19,7 @@ export default function CheckoutForm() {
         );
 
         const cardForm = mp.cardForm({
-          amount: "100", // <-- coloque o total REAL aqui depois
+          amount: total, 
           autoMount: true,
           form: {
             id: "form-checkout",
