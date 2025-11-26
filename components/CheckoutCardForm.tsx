@@ -30,7 +30,7 @@ export default function CheckoutForm() {
     }
   }, []);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async () => {
     const formData = window.cardForm.getCardFormData();
 
     const res = await fetch("/api/checkout", {
