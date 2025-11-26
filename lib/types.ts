@@ -55,5 +55,3 @@ declare global {
     cardForm: any;
   }
 }
-
-export {};
