@@ -49,12 +49,15 @@ export type Border = {
   price: string;
 };
 
-declare global {
-  interface Window {
-    MercadoPago?: unknown;
-    cardForm?: unknown;
-  }
+interface MercadoPagoConstructor {
+  new (publicKey: string, options?: { locale?: string }): any;
 }
 
+declare global {
+  interface Window {
+    MercadoPago?: MercadoPagoConstructor;
+    cardForm?: any;
+  }
+}
 
 
