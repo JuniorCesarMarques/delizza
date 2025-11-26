@@ -51,16 +51,10 @@ export type Border = {
 
 declare global {
   interface Window {
-    MercadoPago?: {
-      CardForm: any; // ou interface que você define depois
-      [key: string]: any;
-    };
-    cardForm?: {
-      submit: () => void;
-      getCardFormData: () => any;
-      [key: string]: any;
-    };
+    MercadoPago?: unknown;
+    cardForm?: unknown;
   }
 }
+
 
 
