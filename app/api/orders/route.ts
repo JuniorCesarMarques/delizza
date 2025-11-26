@@ -25,7 +25,7 @@ export async function POST(req: Request) {
       init_point: response.init_point,
       sandbox: response.sandbox_init_point,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("ERRO MP:", error);
     return NextResponse.json(
       { error: "Erro ao criar pagamento" },

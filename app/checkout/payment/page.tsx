@@ -6,7 +6,6 @@ import { useEffect } from "react";
 export default function CheckoutForm() {
 
   const { total } = useCart();
-  let cardForm: any = null;
   
   useEffect(() => {
     const interval = setInterval(() => {
