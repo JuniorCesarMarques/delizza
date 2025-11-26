@@ -39,7 +39,7 @@ export default function CheckoutForm() {
     return () => clearInterval(interval);
   }, []);
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = window.cardForm.getCardFormData();
