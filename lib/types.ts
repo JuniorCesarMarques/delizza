@@ -48,31 +48,3 @@ export type Border = {
   name: string;
   price: string;
 };
-
-// types/mercadopago.d.ts
-interface CardFormInstance {
-  submit: () => void;
-  getCardFormData: () => Record<string, unknown>; // evita any
-  // adicione outros métodos que você realmente usa
-}
-
-interface MercadoPagoConstructor {
-  new (publicKey: string, options?: { locale?: string }): MercadoPagoInstance;
-  cardForm: (options: object) => CardFormInstance; // método estático
-}
-
-interface MercadoPagoInstance {
-  // aqui você coloca métodos da instância de MercadoPago, se houver
-}
-
-declare global {
-  interface Window {
-    MercadoPago?: MercadoPagoConstructor;
-    cardForm?: CardFormInstance; // guarda a instância criada, se quiser
-  }
-}
-
-
-
-
-

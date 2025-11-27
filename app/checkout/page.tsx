@@ -39,7 +39,7 @@ export default function CheckoutPage() {
       }
 
       // ⬇ redirecionar para pagamento
-      router.push(`/checkout/payment?orderId=${data.orderId}`);
+    //   router.push(`/checkout/payment?orderId=${data.orderId}`);
     } catch (err) {
       console.error("ERRO", err);
     }
