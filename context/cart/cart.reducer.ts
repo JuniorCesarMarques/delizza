@@ -5,11 +5,11 @@ export type CartAction =
   | { type: "REMOVE_ITEM"; payload: { id: string } }
   | { type: "INCREASE_QTY"; payload: { id: string } }
   | { type: "DECREASE_QTY"; payload: { id: string } }
-  | { type: "SET_CART"; payload: { id: string }}
-  | { type: "CLEAR_CART" };
+  | { type: "SET_CART"; payload: CartState}
+  | { type: "CLEAR_CART";}; 
 
 export const cartInitialState: CartState = {
-  items: JSON.parse(localStorage.getItem("cart") as string).items,
+  items: [],
 };
 
 export function cartReducer(
@@ -56,7 +56,7 @@ export function cartReducer(
       return cartInitialState;
 
       case "SET_CART":
-        return {...state}
+        return action.payload
     default:
       return state;
   }

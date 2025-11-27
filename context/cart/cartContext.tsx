@@ -50,16 +50,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const totalQty = state.items?.reduce((acc, item) => acc + item.quantity, 0);
 
   useEffect(() => {
-      localStorage.setItem("cart", JSON.stringify(state));
-  }, [state])
-
-  useEffect(() => {
     const stored = localStorage.getItem("cart");
     if(stored) {
-      dispatch({type: "SET_CART", payload: JSON.parse(stored)})
+      dispatch({type: "SET_CART", payload: JSON.parse(stored)});
+      console.log("ENTROU", stored)
     }
 
   }, []);
+
+    useEffect(() => {
+      localStorage.setItem("cart", JSON.stringify(state));
+  }, [state])
 
   return (
     <CartContext.Provider
