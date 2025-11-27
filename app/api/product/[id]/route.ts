@@ -48,15 +48,9 @@ export async function DELETE(
       { status: 200 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Erro ao excluir produto:", error);
 
-    if (error.code === "P2025") {
-      return NextResponse.json(
-        { error: "Produto não encontrado." },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json(
       { error: "Erro interno ao excluir o produto." },
