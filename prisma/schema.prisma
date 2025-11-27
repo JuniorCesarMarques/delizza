@@ -22,7 +22,7 @@ model Product {
   categoryId  String
   imageUrl    String?
   category    Category            @relation(fields: [categoryId], references: [id])
-  additionals ProductAdditional[]
+  additionals ProductAdditional[] 
   borders     ProductBorder[]
 }
 
@@ -30,7 +30,7 @@ model Additional {
   id               String                @id @default(cuid())
   name             String
   price            Decimal               @db.Decimal(10, 2)
-  products         ProductAdditional[]
+  products         ProductAdditional[]   
   orderAdditionals OrderItemAdditional[]
 }
 
@@ -57,7 +57,7 @@ model ProductAdditional {
   productId    String
   additionalId String
   additional   Additional @relation(fields: [additionalId], references: [id])
-  product      Product    @relation(fields: [productId], references: [id])
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId, additionalId])
 }

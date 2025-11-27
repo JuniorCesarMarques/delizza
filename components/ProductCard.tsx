@@ -15,6 +15,7 @@ import { MenuProps } from "antd";
 import { useEffect, useState } from "react";
 import { CartItem } from "@/context/cart/cart.types";
 import Counter from "./Counter";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type ProductProps = {
   product: ProductType;
@@ -23,8 +24,10 @@ type ProductProps = {
 export default function ProductCard({ product }: ProductProps) {
   const { setModalProps } = useModal();
 
+  const queryClient = useQueryClient();
+
   const router = useRouter();
-  const { addItem, increaseQty, removeItem, decreaseQty, items } = useCart();
+  const { addItem, removeItem, items } = useCart();
 
   const [item, setItem] = useState<CartItem>();
 
@@ -38,27 +41,35 @@ export default function ProductCard({ product }: ProductProps) {
 
   const qtyPizzas = pizzas.reduce((acc, pizza) => pizza.quantity + acc, 0);
 
-  // console.log("ESTADO", items);
 
-  const handleDelete = async () => {
-    const res = await fetch(`${baseUrl}/api/product/${product.id}`, {
+const handleDelete = useMutation({
+  mutationFn: async (id: string) => {
+    const res = await fetch(`/api/product/${id}`, {
       method: "DELETE",
-    });
 
-    if (!res) {
-      toast.error("Erro ao excluir produto.");
+    })
+
+    if(!res.ok) {
+      throw new Error("Erro ao deletar produto")
     }
+  },
 
-    toast.success("Produto excluido com sucesso.");
-    router.refresh();
-  };
+  onSuccess: () => {
+    queryClient.invalidateQueries({queryKey: ["products"]});
+    toast.success("Produto excluido com sucesso.")
+  }, 
+
+  onError: () => {
+    toast.error("Erro ao deletar produto")
+  }
+})
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     e.domEvent.stopPropagation();
     if (e.key === "delete") {
       setModalProps({
         text: "Tem Certeza que deseja excluir?",
-        callback: () => handleDelete(),
+        callback: () => handleDelete.mutate(product.id),
       });
       return;
     }

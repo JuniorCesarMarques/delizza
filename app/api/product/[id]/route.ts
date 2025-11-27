@@ -20,16 +20,48 @@ export async function GET(
   return NextResponse.json(formated);
 }
 
+
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await params;
+  try {
+    const { id } = params;
 
-  await prisma.product.delete({ where: { id } });
+    // 1. Validação do ID
+    if (!id || typeof id !== "string") {
+      return NextResponse.json(
+        { error: "ID inválido ou ausente." },
+        { status: 400 }
+      );
+    }
 
-  return NextResponse.json(
-    { message: "Produto excluido com secesso" },
-    { status: 200 }
-  );
+    const deleted = await prisma.product.delete({
+      where: { id },
+    });
+
+    return NextResponse.json(
+      {
+        message: "Produto excluído com sucesso.",
+        deletedId: deleted.id,
+      },
+      { status: 200 }
+    );
+
+  } catch (error: any) {
+    console.error("Erro ao excluir produto:", error);
+
+    if (error.code === "P2025") {
+      return NextResponse.json(
+        { error: "Produto não encontrado." },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Erro interno ao excluir o produto." },
+      { status: 500 }
+    );
+  }
 }
+

@@ -42,13 +42,15 @@ export default function PizzasList({ products, category }: ProductListType) {
         <div className="flex items-center gap-2">
           <p className="font-bold">Sabores: </p>{" "}
           <div className="flex items-center gap-2">
-            {items.map((item, index) => (
-              <span className="p-1 bg-black text-white font-bold text-sm" key={index}>{item.name}</span>
+            {items.filter(i => i.type === "pizza").map((item, index) => (
+                <span className="p-1 bg-black text-white font-bold text-sm" key={index}>
+                  {item.name}
+              </span>
             ))}
           </div>
         </div>
       </div>
-      {products.map((product) => (
+      {products?.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
       <NextStepButton callback={handleNextStep} />

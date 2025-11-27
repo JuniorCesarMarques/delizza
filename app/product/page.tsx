@@ -1,17 +1,26 @@
+"use client";
+
 import DrinksList from "@/components/DrinksList";
 import PizzasList from "@/components/PizzasList";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Product({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const { category } = await searchParams;
+import { useSearchParams } from "next/navigation";
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+export default function Product() {
+  const searchParams = useSearchParams();
 
-  const res = await fetch(`${baseUrl}/api/product?category=${category}`);
-  const data = await res.json();
+  const category = searchParams.get("category") ?? "";
+
+  const fetcher = async () => {
+    const res = await fetch(`/api/product?category=${category}`);
+
+    return res.json();
+  };
+
+  const { data } = useQuery({
+    queryKey: ["products"],
+    queryFn: fetcher,
+  });
 
   if (category !== "Bebidas") {
     return <PizzasList products={data} category={category} />;
