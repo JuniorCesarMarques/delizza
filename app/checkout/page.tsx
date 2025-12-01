@@ -68,7 +68,7 @@ export default function CheckoutPage() {
         ) : (
           <>
             {pizza.map((p) => (
-              <div className="flex justify-between">
+              <div key={p.id} className="flex justify-between">
                 <span>{p.name}</span>
                 <span className="text-green-600 font-bold whitespace-nowrap">
                   R$ {p.price}
@@ -87,7 +87,7 @@ export default function CheckoutPage() {
         )}
         <>
           {additional.map((a) => (
-            <div className="flex justify-between">
+            <div key={a.id} className="flex justify-between">
               <span>{a.name}</span>
               <span className="text-green-600 font-bold whitespace-nowrap">
                 R$ {a.price}
@@ -97,7 +97,7 @@ export default function CheckoutPage() {
         </>
         <>
           {drinks.map((d) => (
-            <div className="flex justify-between">
+            <div key={d.id} className="flex justify-between">
               <span>{d.name}</span>
               <span className="text-green-600 font-bold whitespace-nowrap">
                 R$ {d.price}
