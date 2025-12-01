@@ -89,9 +89,11 @@ const handleDelete = useMutation({
       } flex items-center relative justify-between border p-4 gap-2 max-w-150`}
       onClick={() => {
 
-        if (item?.id === product.id) {
+        if (items.some(i => i.id === product.id)) {
           removeItem(product.id);
         } else {
+
+
           if (qtyPizzas < 2) {
             addItem({
               id: product.id,
