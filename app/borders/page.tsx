@@ -5,7 +5,6 @@ import NextStepButton from "@/components/NextStepButton";
 import { useCart } from "@/context/cart/cartContext";
 import { Border } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function BordersPage() {

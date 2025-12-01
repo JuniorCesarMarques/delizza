@@ -41,13 +41,23 @@ export default function CheckoutPage() {
   console.log(items, "ITEMS");
   const border = items.find((i) => i.type === "border");
   const pizza = items.filter((i) => i.type === "pizza");
-  const additional = items.filter((i) => i.type === "additional");
-  const drinks = items.filter((i) => i.type === "drink");
+  const additionals = items.filter((i) => i.type === "additional").map(a => {
+    return {
+      ...a,
+      price: a.price.toFixed(2).toString().replace(".", ",")
+    }
+  })
+  const drinks = items.filter((i) => i.type === "drink").map(d => {
+    return {
+      ...d,
+      price: d.price.toFixed(2).toString().replace(".", ",")
+    }
+  });
   const pizzaPrice = getPizzaPrice(items);
-
   const totalPrice = getTotalPrice(items);
+  const formatedBorderPrice = border?.price.toFixed(2).toString().replace(".", ",");
 
-  console.log(items);
+
 
   return (
     <div className="p-6 max-w-xl mx-auto">
@@ -81,12 +91,12 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-between">
             <span>{border.name}</span>
             <span className="text-green-600 font-bold whitespace-nowrap">
-              R$ {border.price}
+              R$ {formatedBorderPrice}
             </span>
           </div>
         )}
         <>
-          {additional.map((a) => (
+          {additionals.map((a) => (
             <div key={a.id} className="flex justify-between">
               <span>{a.name}</span>
               <span className="text-green-600 font-bold whitespace-nowrap">
