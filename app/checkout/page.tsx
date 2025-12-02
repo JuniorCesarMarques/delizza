@@ -2,6 +2,7 @@
 
 import { useCart } from "@/context/cart/cartContext";
 import { getPizzaPrice, getTotalPrice } from "@/utils/itemHooks";
+import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
   const { items } = useCart();
@@ -13,51 +14,69 @@ export default function CheckoutPage() {
     unit_price: Number(i.price),
   }));
 
+  const thereIsNoPizza = !items.some(i => i.type === "pizza");
+  const thereIsBorder = items.some(i => i.type === "border");
+  const thereIsAdditional = items.some(i => i.type === "additional");
+
+  const additionalWithoutPizza = thereIsNoPizza ? thereIsBorder || thereIsAdditional : false;
+
+
   const handleConfirm = async () => {
-    try {
-      const res = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mpItems,
-          total: totalPrice,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.error("ERRO AO CRIAR PEDIDO", data);
-        return;
-      }
-
-      // ⬇ redirecionar para pagamento
-      //   router.push(`/checkout/payment?orderId=${data.orderId}`);
-    } catch (err) {
-      console.error("ERRO", err);
+    if (additionalWithoutPizza) {
+      toast.error("Você não pode comprar adicionais ou borda sem uma pizza.");
+      return;
+    } else {
+      toast.success("Compra efeutada com sucesso");
     }
+
+    // try {
+
+    //   const res = await fetch("/api/orders", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       mpItems,
+    //       total: totalPrice,
+    //     }),
+    //   });
+
+    //   const data = await res.json();
+
+    //   if (!res.ok) {
+    //     console.error("ERRO AO CRIAR PEDIDO", data);
+    //     return;
+    //   }
+
+    // } catch (err) {
+    //   console.error("ERRO", err);
+    // }
   };
 
   console.log(items, "ITEMS");
   const border = items.find((i) => i.type === "border");
   const pizza = items.filter((i) => i.type === "pizza");
-  const additionals = items.filter((i) => i.type === "additional").map(a => {
-    return {
-      ...a,
-      price: a.price.toFixed(2).toString().replace(".", ",")
-    }
-  })
-  const drinks = items.filter((i) => i.type === "drink").map(d => {
-    return {
-      ...d,
-      price: d.price.toFixed(2).toString().replace(".", ",")
-    }
-  });
+  const additionals = items
+    .filter((i) => i.type === "additional")
+    .map((a) => {
+      return {
+        ...a,
+        price: a.price.toFixed(2).toString().replace(".", ","),
+      };
+    });
+  const drinks = items
+    .filter((i) => i.type === "drink")
+    .map((d) => {
+      return {
+        ...d,
+        price: d.price.toFixed(2).toString().replace(".", ","),
+      };
+    });
   const pizzaPrice = getPizzaPrice(items);
   const totalPrice = getTotalPrice(items);
-  const formatedBorderPrice = border?.price.toFixed(2).toString().replace(".", ",");
-
-
+  const formatedBorderPrice = border?.price
+    .toFixed(2)
+    .toString()
+    .replace(".", ",");
 
   return (
     <div className="p-6 max-w-xl mx-auto">
