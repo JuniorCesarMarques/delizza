@@ -1,25 +1,18 @@
 "use client";
 
 import { useCart } from "@/context/cart/cartContext";
-import { getPizzaPrice, getTotalPrice } from "@/utils/itemHooks";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
   const { items } = useCart();
 
-  const mpItems = items.map((i) => ({
-    id: i.id,
-    title: i.name,
-    quantity: i.quantity,
-    unit_price: Number(i.price),
-  }));
+  const thereIsNoPizza = !items.some((i) => i.type === "pizza");
+  const thereIsBorder = items.some((i) => i.type === "border");
+  const thereIsAdditional = items.some((i) => i.type === "additional");
 
-  const thereIsNoPizza = !items.some(i => i.type === "pizza");
-  const thereIsBorder = items.some(i => i.type === "border");
-  const thereIsAdditional = items.some(i => i.type === "additional");
-
-  const additionalWithoutPizza = thereIsNoPizza ? thereIsBorder || thereIsAdditional : false;
-
+  const additionalWithoutPizza = thereIsNoPizza
+    ? thereIsBorder || thereIsAdditional
+    : false;
 
   const handleConfirm = async () => {
     if (additionalWithoutPizza) {
@@ -55,6 +48,12 @@ export default function CheckoutPage() {
   console.log(items, "ITEMS");
   const border = items.find((i) => i.type === "border");
   const pizza = items.filter((i) => i.type === "pizza");
+
+  const pizzaPrice = pizza
+    .reduce((acc, p) => p.price * p.quantity + acc, 0)
+    .toFixed(2)
+    .replace(".", ",");
+
   const additionals = items
     .filter((i) => i.type === "additional")
     .map((a) => {
@@ -64,15 +63,8 @@ export default function CheckoutPage() {
       };
     });
   const drinks = items
-    .filter((i) => i.type === "drink")
-    .map((d) => {
-      return {
-        ...d,
-        price: d.price.toFixed(2).toString().replace(".", ","),
-      };
-    });
-  const pizzaPrice = getPizzaPrice(items);
-  const totalPrice = getTotalPrice(items);
+    .filter((i) => i.type === "drink");
+
   const formatedBorderPrice = border?.price
     .toFixed(2)
     .toString()
@@ -87,7 +79,7 @@ export default function CheckoutPage() {
           <div className="fle flex-col items-baseline">
             <div className="flex items-center gap-2 justify-between">
               {pizza.map((p, i) => (
-                <span key={i}>Meia {p.name}</span>
+                <span key={i}>Meia {p.name} (1)</span>
               ))}
               <span className="font-bold text-green-600 whitespace-nowrap">
                 R$ {pizzaPrice}
@@ -98,9 +90,9 @@ export default function CheckoutPage() {
           <>
             {pizza.map((p) => (
               <div key={p.id} className="flex justify-between">
-                <span>{p.name}</span>
+                <span>{p.name} (1)</span>
                 <span className="text-green-600 font-bold whitespace-nowrap">
-                  R$ {p.price}
+                  R$ {pizzaPrice}
                 </span>
               </div>
             ))}
@@ -108,7 +100,7 @@ export default function CheckoutPage() {
         )}
         {border && (
           <div className="flex items-center justify-between">
-            <span>{border.name}</span>
+            <span>{border.name} (1)</span>
             <span className="text-green-600 font-bold whitespace-nowrap">
               R$ {formatedBorderPrice}
             </span>
@@ -117,7 +109,7 @@ export default function CheckoutPage() {
         <>
           {additionals.map((a) => (
             <div key={a.id} className="flex justify-between">
-              <span>{a.name}</span>
+              <span>{a.name} (1)</span>
               <span className="text-green-600 font-bold whitespace-nowrap">
                 R$ {a.price}
               </span>
@@ -127,16 +119,16 @@ export default function CheckoutPage() {
         <>
           {drinks.map((d) => (
             <div key={d.id} className="flex justify-between">
-              <span>{d.name}</span>
+              <span>{d.name} ({d.quantity})</span>
               <span className="text-green-600 font-bold whitespace-nowrap">
-                R$ {d.price}
+                R$ {(Number(d.quantity) * Number(d.price)).toFixed(2).replace(".", ",")}
               </span>
             </div>
           ))}
         </>
       </div>
       <div className="text-xl font-bold mt-8 text-right whitespace-nowrap">
-        Total: R$ {totalPrice}
+        Total: R$ {}
       </div>
 
       <button
