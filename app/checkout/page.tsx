@@ -4,7 +4,7 @@ import { useCart } from "@/context/cart/cartContext";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
-  const { items } = useCart();
+  const { items, total } = useCart();
 
   const thereIsNoPizza = !items.some((i) => i.type === "pizza");
   const thereIsBorder = items.some((i) => i.type === "border");
@@ -53,6 +53,8 @@ export default function CheckoutPage() {
     .reduce((acc, p) => p.price * p.quantity + acc, 0)
     .toFixed(2)
     .replace(".", ",");
+
+
 
   const additionals = items
     .filter((i) => i.type === "additional")
@@ -128,7 +130,7 @@ export default function CheckoutPage() {
         </>
       </div>
       <div className="text-xl font-bold mt-8 text-right whitespace-nowrap">
-        Total: R$ {}
+        Total: R$ {total.toFixed(2).replace(".", ",")}
       </div>
 
       <button
