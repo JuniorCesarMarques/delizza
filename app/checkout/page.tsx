@@ -1,9 +1,11 @@
 "use client";
 
 import { useCart } from "@/context/cart/cartContext";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function CheckoutPage() {
+  const router = useRouter();
   const { items, total } = useCart();
 
   const thereIsNoPizza = !items.some((i) => i.type === "pizza");
@@ -19,7 +21,7 @@ export default function CheckoutPage() {
       toast.error("Você não pode comprar adicionais ou borda sem uma pizza.");
       return;
     } else {
-      toast.success("Compra efeutada com sucesso");
+      router.push("/gateway")
     }
 
     // try {
