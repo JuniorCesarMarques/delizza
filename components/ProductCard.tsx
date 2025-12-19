@@ -35,37 +35,34 @@ export default function ProductCard({ product }: ProductProps) {
     setItem(items.find((item) => item.id === product.id));
   }, [items]);
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-
   const pizzas = items.filter((item) => item.type === "pizza");
 
   const qtyPizzas = pizzas.reduce((acc, pizza) => pizza.quantity + acc, 0);
 
+  const handleDelete = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/product/${id}`, {
+        method: "DELETE",
+      });
 
-const handleDelete = useMutation({
-  mutationFn: async (id: string) => {
-    const res = await fetch(`/api/product/${id}`, {
-      method: "DELETE",
+      if (!res.ok) {
+        throw new Error("Erro ao deletar produto");
+      }
+    },
 
-    })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success("Produto excluido com sucesso.");
+    },
 
-    if(!res.ok) {
-      throw new Error("Erro ao deletar produto")
-    }
-  },
-
-  onSuccess: () => {
-    queryClient.invalidateQueries({queryKey: ["products"]});
-    toast.success("Produto excluido com sucesso.")
-  }, 
-
-  onError: () => {
-    toast.error("Erro ao deletar produto")
-  }
-})
+    onError: () => {
+      toast.error("Erro ao deletar produto");
+    },
+  });
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     e.domEvent.stopPropagation();
+
     if (e.key === "delete") {
       setModalProps({
         text: "Tem Certeza que deseja excluir?",
@@ -81,6 +78,7 @@ const handleDelete = useMutation({
 
   console.log("QUANTIDADE DE METADES DE PIZZA", qtyPizzas);
 
+
   return (
     <div
       key={product.id}
@@ -88,11 +86,9 @@ const handleDelete = useMutation({
         items.some((item) => item.id === product.id) && "border-blue-500"
       } flex items-center relative justify-between border p-4 gap-2 max-w-150`}
       onClick={() => {
-
         if (items.some(i => i.id === product.id)) {
           removeItem(product.id);
         } else {
-
 
           if (qtyPizzas < 2) {
             addItem({
@@ -104,6 +100,7 @@ const handleDelete = useMutation({
             });
           }
         }
+
       }}
     >
       <div>
@@ -114,10 +111,7 @@ const handleDelete = useMutation({
         </p>
       </div>
 
-      <Counter
-        increaseRule={qtyPizzas < 2}
-        item={item}
-      />
+      <Counter increaseRule={qtyPizzas < 2} item={item} />
 
       <Image
         src={product.imageUrl || "/sem-foto.png"}

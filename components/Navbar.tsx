@@ -23,14 +23,14 @@ export default function Navbar() {
             <LuNotebookPen size={20} />
           </span>
         </li>
+        <Link href="/checkout">
         <li className="flex flex-col items-center cursor-pointer relative">
-          <Link href="/checkout">
             <AiOutlineShoppingCart size={20} />
-          </Link>
           <span className="flex justify-center items-center absolute bg-red-500 rounded-full text-sm text-white font-bold w-5 h-5 top-[-10px] right-[-10px]">
             {totalQty}
           </span>
         </li>
+        </Link>
       </ul>
     </nav>
   );

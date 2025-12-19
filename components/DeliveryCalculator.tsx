@@ -5,7 +5,7 @@ import {
   STORE_LOCATION,
   getDistanceFromLatLonInKm,
   calculateDeliveryFee,
-} from "@/utils/location";
+} from "@/utils/getCoords";
 
 export default function DeliveryCalculator({
   onFeeCalculated,
