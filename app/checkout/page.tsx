@@ -8,6 +8,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, total } = useCart();
 
+
   const thereIsNoPizza = !items.some((i) => i.type === "pizza");
   const thereIsBorder = items.some((i) => i.type === "border");
   const thereIsAdditional = items.some((i) => i.type === "additional");
@@ -16,35 +17,15 @@ export default function CheckoutPage() {
     ? thereIsBorder || thereIsAdditional
     : false;
 
+
   const handleConfirm = async () => {
     if (additionalWithoutPizza) {
       toast.error("Você não pode comprar adicionais ou borda sem uma pizza.");
       return;
     } else {
-      router.push("/gateway")
+     router.push("/gateway")
     }
 
-    // try {
-
-    //   const res = await fetch("/api/orders", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       mpItems,
-    //       total: totalPrice,
-    //     }),
-    //   });
-
-    //   const data = await res.json();
-
-    //   if (!res.ok) {
-    //     console.error("ERRO AO CRIAR PEDIDO", data);
-    //     return;
-    //   }
-
-    // } catch (err) {
-    //   console.error("ERRO", err);
-    // }
   };
 
   console.log(items, "ITEMS");

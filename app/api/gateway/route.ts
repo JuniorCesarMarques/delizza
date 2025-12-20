@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
 import MercadoPagoConfig, { Payment } from "mercadopago";
 
+import { prisma } from "@/lib/prisma";
+
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN!,
 });
 
-
 export async function POST(req: Request) {
   const body = await req.json();
 
-  console.log(body, "BODY")
+  console.log(body, "BODY");
 
   const payment = new Payment(client);
 
-  console.log("BODY", body)
+  console.log("BODY", body);
 
 
   const result = await payment.create({
@@ -31,8 +32,6 @@ export async function POST(req: Request) {
       },
     },
   });
-
-  console.log("RESULT", result);
 
   return NextResponse.json(result);
 }

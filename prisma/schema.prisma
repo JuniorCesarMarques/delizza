@@ -55,7 +55,6 @@ model Additional {
   name             String
   price            Decimal               @db.Decimal(10, 2)
   products         ProductAdditional[]   
-  orderAdditionals OrderItemAdditional[]
 }
 
 model Border {
@@ -63,7 +62,6 @@ model Border {
   name       String
   price      Decimal         @db.Decimal(10, 2)
   products   ProductBorder[]
-  orderItems OrderItem[]
 }
 
 model ProductBorder {
@@ -86,37 +84,11 @@ model ProductAdditional {
   @@unique([productId, additionalId])
 }
 
-model Order {
-  id        String      @id @default(cuid())
-  status    OrderStatus @default(PENDING)
-  createdAt DateTime    @default(now())
-  items     OrderItem[]
-}
-
-enum OrderStatus {
-  PENDING
-  PAID
-  FAILED
-}
-
-model OrderItem {
-  id          String                @id @default(cuid())
-  orderId     String
-  productId   String
-  borderId    String?
-  quantity    Int
-  basePrice   Decimal               @db.Decimal(10, 2)
-  totalPrice  Decimal               @db.Decimal(10, 2)
-  additionals OrderItemAdditional[]
-  border      Border?               @relation(fields: [borderId], references: [id])
-  Order       Order                 @relation(fields: [orderId], references: [id])
-}
-
-model OrderItemAdditional {
-  id           String     @id @default(cuid())
-  orderItemId  String
-  additionalId String
-  price        Decimal    @db.Decimal(10, 2)
-  additional   Additional @relation(fields: [additionalId], references: [id])
-  orderItem    OrderItem  @relation(fields: [orderItemId], references: [id])
+model SimpleOrder {
+  id        String   @id @default(cuid())
+  customer  String?
+  items     Json
+  total     Decimal  @db.Decimal(10, 2)
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
 }

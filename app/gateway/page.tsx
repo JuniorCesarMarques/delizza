@@ -5,6 +5,7 @@ import { useCart } from "@/context/cart/cartContext";
 import { createCardToken } from "@/utils/createMpToken";
 import { getPaymentMethodByBin } from "@/utils/getPaymentMethodByBin";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export type Inputs = {
   email: string;
@@ -26,7 +27,7 @@ export type Inputs = {
 export default function Gateway() {
   const { register, watch, handleSubmit } = useForm<Inputs>();
 
-  const { total } = useCart();
+  const { total, items } = useCart();
 
   console.log(total, "TOTAL");
 
@@ -40,11 +41,19 @@ export default function Gateway() {
     const result = await createCardToken(data);
     const paymentMethodId = await getPaymentMethodByBin(data.cardNumber);
 
+    await fetch("/api/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        items: items,
+        customer: data.email,
+        total: total
+
+      })
+    })
 
 
-
-
-    await fetch("/api/gateway", {
+    const res = await fetch("/api/gateway", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -61,18 +70,26 @@ export default function Gateway() {
         }
       }),
     });
+
+    console.log(res, "RES")
+
+    if(!res.ok) {
+      console.log("Erro na requisição de pagamento");
+    }
+
+    const mpRes = await res.json();
+
+    console.log(mpRes, "MPRES")
+
+    if(mpRes.status !== "approved") {
+      toast.error("Erro ao realizar pagamento")
+    }
+
+    toast.success("Pagamento aprovado");
+
+
   }
 
-
-  // useEffect(() => {
-  //   const caller = async () => {
-  //      const coords = await getCoords("Rua Gilson Francisco Rodrigues, 457, São Conrado, Tatuí, SP");
-  //      console.log(coords)
-  //   }
-
-  //   caller();
-   
-  // }, [])
 
   const formatedPrice = total.toFixed(2).replace(".", ",");
 
