@@ -20,7 +20,9 @@ export default function Navbar() {
         </li>
         <li className="flex flex-col items-center">
           <span>
-            <LuNotebookPen size={20} />
+            <Link href="/orders">
+              <LuNotebookPen size={20} />
+            </Link>
           </span>
         </li>
         <Link href="/checkout">
