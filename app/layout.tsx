@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   description: "Pizzas Preparadas com Amor",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -44,8 +43,11 @@ export default function RootLayout({
               <Header />
               <div className="py-40">
                 {children}
+                <Script
+                  src="https://sdk.mercadopago.com/js/v2"
+                  strategy="afterInteractive"
+                />
                 <Toaster position="top-right" />
-                <Script src="https://sdk.mercadopago.com/js/v2" strategy="afterInteractive" />
               </div>
               <Modal />
               <Navbar />

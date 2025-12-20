@@ -6,8 +6,6 @@ const client = new MercadoPagoConfig({
 });
 
 
-
-
 export async function POST(req: Request) {
   const body = await req.json();
 
@@ -15,7 +13,7 @@ export async function POST(req: Request) {
 
   const payment = new Payment(client);
 
-console.log("BODY", body)
+  console.log("BODY", body)
 
 
   const result = await payment.create({
@@ -23,7 +21,7 @@ console.log("BODY", body)
       transaction_amount: body.amount,
       description: "Pedido Loja XYZ",
       installments: body.installments,
-      payment_method_id: body.payment_method_id,
+      token: body.token,
       payer: {
         email: body.payer.email,
         identification: {

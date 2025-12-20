@@ -13,8 +13,8 @@ export async function createCardToken(data: Inputs) {
 
   const result = await mp.createCardToken({
     cardNumber: data.cardNumber.replace(/\s/g, ""),
-    expirationMonth: data.expirationMonth,
-    expirationYear: data.expirationYear,
+    cardExpirationMonth: data.expirationMonth,
+    cardExpirationYear: data.expirationYear,
     securityCode: data.securityCode,
     cardholderName: data.cardName,
     identificationType: "CPF",

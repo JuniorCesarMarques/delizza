@@ -4,6 +4,8 @@ import CardForm from "@/components/cardForm";
 import { useCart } from "@/context/cart/cartContext";
 import { createCardToken } from "@/utils/createMpToken";
 import { getPaymentMethodByBin } from "@/utils/getPaymentMethodByBin";
+import Script from "next/script";
+import { useState } from "react";
 // import { getCoords } from "@/utils/getCoords";
 // import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -42,7 +44,7 @@ export default function Gateway() {
     const result = await createCardToken(data);
     const paymentMethodId = await getPaymentMethodByBin(data.cardNumber);
 
-      console.log("MP SDK:", window.MercadoPago);
+
 
 
 
@@ -56,7 +58,10 @@ export default function Gateway() {
         installments: 1,
         payer: {
           email: data.email,
-          cpf: data.cpf
+          identification: {
+            type: "CPF",
+            number: data.cpf
+          }
         }
       }),
     });
@@ -76,6 +81,7 @@ export default function Gateway() {
   const formatedPrice = total.toFixed(2).replace(".", ",");
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
       <p className="text-3xl font-bold text-center text-gray-800">
         Informações para finalizar seu pedido
@@ -153,5 +159,6 @@ export default function Gateway() {
       </div>
       <button type="submit" className="bg-green-500 p-4 text-white text-lg">Finalizar compra</button>
     </form>
+    </>
   );
 }
