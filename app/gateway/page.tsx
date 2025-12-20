@@ -4,10 +4,6 @@ import CardForm from "@/components/cardForm";
 import { useCart } from "@/context/cart/cartContext";
 import { createCardToken } from "@/utils/createMpToken";
 import { getPaymentMethodByBin } from "@/utils/getPaymentMethodByBin";
-import Script from "next/script";
-import { useState } from "react";
-// import { getCoords } from "@/utils/getCoords";
-// import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export type Inputs = {
