@@ -84,7 +84,7 @@ model ProductAdditional {
   @@unique([productId, additionalId])
 }
 
-model SimpleOrder {
+model Order {
   id        String   @id @default(cuid())
   customer  String?
   items     Json

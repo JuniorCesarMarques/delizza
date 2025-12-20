@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   console.log("BODY", body);
 
 
-  const result = await prisma.simpleOrder.create({
+  const result = await prisma.order.create({
     data: {
         items: body.items,
         customer: body.email,
