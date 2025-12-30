@@ -3,12 +3,15 @@
 import CardForm from "@/components/cardForm";
 import { useCart } from "@/context/cart/cartContext";
 import { createCardToken } from "@/utils/createMpToken";
+import getCoords from "@/utils/getCoords";
 import { getPaymentMethodByBin } from "@/utils/getPaymentMethodByBin";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 export type Inputs = {
+  name: string;
   email: string;
+  cep: string;
   street: string;
   number: string;
   neighborhood: string;
@@ -38,19 +41,30 @@ export default function Gateway() {
 
   async function onSubmit(data: Inputs) {
 
+    // const coords = await getCoords({
+    //   cep: data.cep,
+    //   neighborhood: data.neighborhood,
+    //   street: data.street,
+    //   number: data.number,
+    // });
+
+    // console.log("COORDS", coords);
+
+    // const res = await fetch("/api/order", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "applicaiton/json"
+    //   },
+    //   body: JSON.stringify({
+    //     customer: data.name,
+    //     subtotal: total,
+        
+
+    //   })
+    // })
+
     const result = await createCardToken(data);
     const paymentMethodId = await getPaymentMethodByBin(data.cardNumber);
-
-    await fetch("/api/order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        items: items,
-        customer: data.email,
-        total: total
-
-      })
-    })
 
 
     const res = await fetch("/api/gateway", {
@@ -71,15 +85,12 @@ export default function Gateway() {
       }),
     });
 
-    console.log(res, "RES")
-
     if(!res.ok) {
       console.log("Erro na requisição de pagamento");
     }
 
     const mpRes = await res.json();
 
-    console.log(mpRes, "MPRES")
 
     if(mpRes.status !== "approved") {
       toast.error("Erro ao realizar pagamento")
@@ -94,59 +105,9 @@ export default function Gateway() {
   const formatedPrice = total.toFixed(2).replace(".", ",");
 
   return (
-    <>
+    <div className="pt-20 pb-10">
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
-      <p className="text-3xl font-bold text-center text-gray-800">
-        Informações para finalizar seu pedido
-      </p>
 
-      {/* Telefone */}
-      <div className="flex flex-col w-full">
-        <label className="text-gray-600 font-semibold mb-1">
-          Email
-        </label>
-        <input
-          className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-          placeholder="Digite seu email"
-          type="text"
-          {...register("email")}
-        />
-      </div>
-
-      <h1 className="text-gray-700 font-bold text-xl mt-2">Endereço</h1>
-
-      {/* Grid do endereço */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
-        <div className="flex flex-col">
-          <label className="text-gray-600 font-semibold mb-1">Rua*</label>
-          <input
-            className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Digite sua "
-            type="text"
-            {...register("street")}
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="text-gray-600 font-semibold mb-1">Número*</label>
-          <input
-            className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Digite o número"
-            type="text"
-            {...register("number")}
-          />
-        </div>
-
-        <div className="flex flex-col sm:col-span-2">
-          <label className="text-gray-600 font-semibold mb-1">Bairro*</label>
-          <input
-            className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="Digite o bairro"
-            type="text"
-            {...register("neighborhood")}
-          />
-        </div>
-      </div>
 
       <div>
         <h1 className="text-gray-700 font-bold text-xl mt-2">Forma de pagamento:</h1>
@@ -164,6 +125,18 @@ export default function Gateway() {
       </div>
 
       {/* Total */}
+     <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <p className="font-bold text-gray-700 text-lg">Subtotal:</p>
+        <span className="font-bold text-green-600 text-xl">
+          R$ {formatedPrice}
+        </span>
+      </div>
+      <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border shadow-sm">
+        <p className="font-bold text-gray-700 text-lg">Entrega:</p>
+        <span className="font-bold text-green-600 text-xl">
+          R$ {formatedPrice}
+        </span>
+      </div>
       <div className="flex justify-between items-center bg-gray-50 p-4 rounded-xl border shadow-sm">
         <p className="font-bold text-gray-700 text-lg">Total:</p>
         <span className="font-bold text-green-600 text-xl">
@@ -172,6 +145,6 @@ export default function Gateway() {
       </div>
       <button type="submit" className="bg-green-500 p-4 text-white text-lg">Finalizar compra</button>
     </form>
-    </>
+    </div>
   );
 }

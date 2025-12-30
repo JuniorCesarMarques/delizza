@@ -56,7 +56,7 @@ export default function CheckoutPage() {
     .replace(".", ",");
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="pt-30 max-w-xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Resumo do Pedido</h1>
 
       <div className="p-3 border rounded flex flex-col gap-3">

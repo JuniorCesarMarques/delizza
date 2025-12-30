@@ -29,7 +29,7 @@ export default function AdditionalsPage() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pt-30">
       <h1 className="text-2xl font-bold mb-2">Bora turbinar sua pizza? 🍕</h1>
       {isLoading ? (
         <div className="flex flex-col items-center gap-4 animate-pulse">

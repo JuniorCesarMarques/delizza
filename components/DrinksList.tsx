@@ -26,7 +26,7 @@ export default function DrinksList() {
   };
 
   return (
-    <div>
+    <div className="pt-30">
       <div className=" bg-white z-10 w-full p-2">
         <h1 className="text-3xl font-bold">O que vai beber hoje? 🥤</h1>
       </div>

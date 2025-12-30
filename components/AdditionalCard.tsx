@@ -89,6 +89,7 @@ export default function AdditionalCard({
     }} className={`${
         additionals.find((b) => b.id === additional.id) ? "border-blue-500" : ""
       } w-60 border rounded-xl p-3 shadow-sm bg-white relative flex flex-col gap-1 hover:shadow-md transition`}>
+
       <div className="absolute top-0 right-2">
         <DropdownMenu
           handleClick={handleMenuClick}

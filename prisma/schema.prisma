@@ -9,11 +9,21 @@ datasource db {
 
 model User {
   id         String  @id @default(cuid())
-  name       String?
-  password   String?
+  name       String
+  password   String
   role       Role @default(USER)
   addresses  Address[]
-  phone      String?
+}
+
+model Address {
+  id            String @id @default(cuid())
+  cep           String
+  street        String
+  number        String
+  neighborhood  String
+  userId        String
+  user          User  @relation(fields: [userId], references: [id])
+
 }
 
 enum Role {
@@ -22,14 +32,6 @@ enum Role {
 }
 
 
-model Address {
-  id            String @id @default(cuid())
-  userId        String 
-  street        String
-  number        String
-  neighborhood  String
-  user          User @relation(fields: [userId], references: [id])
-}
 
 model Category {
   id       String    @id @default(cuid())
@@ -85,10 +87,31 @@ model ProductAdditional {
 }
 
 model Order {
-  id        String   @id @default(cuid())
-  customer  String?
-  items     Json
-  total     Decimal  @db.Decimal(10, 2)
-  status    String   @default("PENDING")
-  createdAt DateTime @default(now())
+  id              String      @id @default(cuid())
+  customer        String?
+  subtotal        Decimal     @db.Decimal(10, 2)
+  deliveryFee     Decimal     @db.Decimal(10, 2)
+  total           Decimal     @db.Decimal(10, 2)
+  createdAt       DateTime    @default(now())
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id])
+
+  productName String
+  type        OrderItemType
+
+  quantity    Int
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  totalPrice  Decimal  @db.Decimal(10, 2)
+}
+
+enum OrderItemType {
+  PIZZA
+  BORDER
+  ADDITIONAL
 }

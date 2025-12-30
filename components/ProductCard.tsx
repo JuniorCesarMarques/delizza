@@ -17,11 +17,13 @@ import { CartItem } from "@/context/cart/cart.types";
 import Counter from "./Counter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+
 type ProductProps = {
   product: ProductType;
 };
 
 export default function ProductCard({ product }: ProductProps) {
+  
   const { setModalProps } = useModal();
 
   const queryClient = useQueryClient();

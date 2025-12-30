@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 type OrdersType = {
-    id: string;
+  id: string;
   customer?: string;
   items: any[];
   total: number;
@@ -40,20 +40,6 @@ export default function OrdersList() {
       </p>
       <p>
         <strong>Total:</strong> R$ {Number(order.total).toFixed(2).toString().replace(".", ",")}
-      </p>
-      <p>
-        <strong>Status:</strong>{" "}
-        <span
-          className={
-            order.status === "PENDING"
-              ? "text-yellow-500 font-semibold"
-              : order.status === "PAID"
-              ? "text-green-600 font-semibold"
-              : "text-red-600 font-semibold"
-          }
-        >
-          {order.status}
-        </span>
       </p>
       <p>
         <strong>Itens:</strong>

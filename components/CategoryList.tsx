@@ -6,6 +6,7 @@ import { Skeleton } from "antd";
 import { CategoryType } from "@/lib/types";
 
 export default function CategoryList() {
+
   const fetchCategories = async (): Promise<CategoryType[]> => {
     const res = await fetch("/api/category");
 

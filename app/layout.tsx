@@ -11,6 +11,7 @@ import Modal from "@/components/Modal";
 import ReactQueryProvider from "@/app/providers/ReactQueryProvider";
 import { CartProvider } from "@/context/cart/cartContext";
 import Script from "next/script";
+import AuthProvider from "./contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,23 +38,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          <ReactQueryProvider>
-            <ModalProvider>
-              <Header />
-              <div className="py-40">
-                {children}
-                <Script
-                  src="https://sdk.mercadopago.com/js/v2"
-                  strategy="afterInteractive"
-                />
-                <Toaster position="top-right" />
-              </div>
-              <Modal />
-              <Navbar />
-            </ModalProvider>
-          </ReactQueryProvider>
-        </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <ReactQueryProvider>
+                <ModalProvider>
+                  <Header />
+                    {children}
+                    <Script
+                      src="https://sdk.mercadopago.com/js/v2"
+                      strategy="afterInteractive"
+                    />
+                    <Toaster position="top-right" />
+                  <Modal />
+                  <Navbar />
+                </ModalProvider>
+              </ReactQueryProvider>
+            </CartProvider>
+          </AuthProvider>
       </body>
     </html>
   );

@@ -38,8 +38,8 @@ export default function PizzasList({ products, category }: ProductListType) {
   if(!products) return <ProductCardSkeleton />
 
   return (
-    <div>
-      <div className="fixed top-15 bg-white z-10 w-full p-2">
+    <div className="pt-45">
+      <div className="fixed top-18 bg-green-500 z-10 w-full p-2">
         <h1>{category}</h1>
         <p className="font-bold text-2xl">Escolha o seu sabor preferido</p>
         <div className="flex items-center gap-2">
@@ -53,8 +53,8 @@ export default function PizzasList({ products, category }: ProductListType) {
           </div>
         </div>
       </div>
+      
       <div>
-
         {products?.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

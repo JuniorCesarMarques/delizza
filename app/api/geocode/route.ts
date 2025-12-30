@@ -1,41 +1,56 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
   const address = searchParams.get("address");
 
   if (!address) {
-    return NextResponse.json({ error: "Missing address" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Endereço não informado" },
+      { status: 400 }
+    );
   }
 
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+  const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(
     address
-  )}&key=${apiKey}`;
+  )}`;
+
+  console.log("URL", url);
 
   try {
-    const response = await fetch(url);
-    const data = await response.json();
+    const res = await fetch(url, {
+      headers: {
+        // OBRIGATÓRIO PELO NOMINATIM
+        "User-Agent": "meu-app/1.0 (contato@meuapp.com)",
+      },
+    });
 
-    if (data.status !== "OK") {
+    if (!res.ok) {
       return NextResponse.json(
-        { error: "Google error", details: data },
-        { status: 400 }
+        { error: "Erro ao consultar geolocalização" },
+        { status: 500 }
       );
     }
 
-    const result = data.results[0];
-    const location = result.geometry.location;
+    const data = await res.json();
+
+    if (!data.length) {
+      return NextResponse.json(
+        { error: "Endereço não encontrado" },
+        { status: 404 }
+      );
+    }
+
+    const location = data[0];
 
     return NextResponse.json({
-      lat: location.lat,
-      lng: location.lng,
-      formatted: result.formatted_address,
+      lat: Number(location.lat),
+      lon: Number(location.lon),
+      displayName: location.display_name,
     });
-
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal error" },
+      { error: "Falha inesperada" },
       { status: 500 }
     );
   }

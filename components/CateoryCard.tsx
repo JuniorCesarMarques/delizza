@@ -16,6 +16,7 @@ type CategoryCardProps = {
 
 export default function CategoryCard({ category }: CategoryCardProps) {
 
+
   const router = useRouter();
 
   const { setModalProps } = useModal();

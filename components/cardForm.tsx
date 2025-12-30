@@ -18,13 +18,13 @@ export default function CardForm({register}: CardFormType) {
           <input
             {...register("cardName", { required: true })}
             placeholder="Nome no cartão"
-            className="border p-2 rounded"
+            className="border p-2 rounded flex-1"
           />
           <input
             {...register("cardNumber", { required: true })}
             placeholder="Número do cartão"
             inputMode="numeric"
-            className="border p-2 rounded"
+            className="border p-2 rounded flex-1"
           />
       </div>
 
@@ -33,13 +33,13 @@ export default function CardForm({register}: CardFormType) {
           {...register("expirationMonth", { required: true })}
           placeholder="MM"
           maxLength={2}
-          className="border p-2 rounded"
+          className="border p-2 rounded flex-1"
         />
         <input
           {...register("expirationYear", { required: true })}
           placeholder="AA"
           maxLength={2}
-          className="border p-2 rounded"
+          className="border p-2 rounded flex-1"
         />
       </div>
 
@@ -50,11 +50,19 @@ export default function CardForm({register}: CardFormType) {
         className="border p-2 rounded"
       />
 
-      <input
-        {...register("cpf", { required: true })}
-        placeholder="CPF do titular"
-        className="border p-2 rounded"
-      />
+      <div className="flex gap-3">
+        <input
+          {...register("cpf", { required: true })}
+          placeholder="CPF do titular"
+          className="border p-2 rounded flex-1"
+        />
+          <input
+            className="border rounded flex-1 p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder="Digite seu email"
+            type="text"
+            {...register("email")}
+          />
+      </div>
 
     </div>
   );
