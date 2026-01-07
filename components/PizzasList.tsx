@@ -48,7 +48,7 @@ export default function PizzasList({ products, category }: ProductListType) {
             {items
               .filter((i) => i.type === "pizza")
               .map((item, index) => (
-                <div className="flex items-center gap-2">
+                <div key={index} className="flex items-center gap-2">
                   <p>Meia</p>
                   <span
                     className="p-1 bg-black text-white font-bold text-sm"
