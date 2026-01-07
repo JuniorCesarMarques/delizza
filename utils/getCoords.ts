@@ -3,8 +3,6 @@
 type AddressType = {
     street: string;
     number: string;
-    neighborhood: string;
-    cep?: string;
 }
 
 export default async function getCoords(address: AddressType) {

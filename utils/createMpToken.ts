@@ -1,4 +1,4 @@
-import { Inputs } from "@/app/gateway/page";
+import { Inputs } from "@/app/gateway/[id]/page";
 
 export async function createCardToken(data: Inputs) {
   // garante que o SDK carregou
@@ -21,7 +21,7 @@ export async function createCardToken(data: Inputs) {
     identificationNumber: data.cpf.replace(/\D/g, ""),
   });
 
-  console.log("RESULT", result)
+  console.log("RESULT", result);
 
   if (result.error) {
     console.error(result);

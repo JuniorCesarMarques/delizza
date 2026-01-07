@@ -8,7 +8,6 @@ export default function CheckoutPage() {
   const router = useRouter();
   const { items, total } = useCart();
 
-
   const thereIsNoPizza = !items.some((i) => i.type === "pizza");
   const thereIsBorder = items.some((i) => i.type === "border");
   const thereIsAdditional = items.some((i) => i.type === "additional");
@@ -17,18 +16,29 @@ export default function CheckoutPage() {
     ? thereIsBorder || thereIsAdditional
     : false;
 
-
   const handleConfirm = async () => {
+    const orderId = window.localStorage.getItem("orderId");
+
+
     if (additionalWithoutPizza) {
       toast.error("Você não pode comprar adicionais ou borda sem uma pizza.");
       return;
-    } else {
-     router.push("/gateway")
     }
+
+    const res = await fetch(`api/check-order-id/${orderId}`);
+
+    console.log(res, "RES");
+
+
+    if(!orderId || !res.ok) {
+      router.push("/get-info")
+      return
+    }
+
+    router.push(`/gateway/${orderId}`);
 
   };
 
-  console.log(items, "ITEMS");
   const border = items.find((i) => i.type === "border");
   const pizza = items.filter((i) => i.type === "pizza");
 
@@ -36,8 +46,6 @@ export default function CheckoutPage() {
     .reduce((acc, p) => p.price * p.quantity + acc, 0)
     .toFixed(2)
     .replace(".", ",");
-
-
 
   const additionals = items
     .filter((i) => i.type === "additional")
@@ -47,8 +55,7 @@ export default function CheckoutPage() {
         price: a.price.toFixed(2).toString().replace(".", ","),
       };
     });
-  const drinks = items
-    .filter((i) => i.type === "drink");
+  const drinks = items.filter((i) => i.type === "drink");
 
   const formatedBorderPrice = border?.price
     .toFixed(2)
@@ -56,7 +63,7 @@ export default function CheckoutPage() {
     .replace(".", ",");
 
   return (
-    <div className="pt-30 max-w-xl mx-auto">
+    <div className="p-5 max-w-xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center">Resumo do Pedido</h1>
 
       <div className="p-3 border rounded flex flex-col gap-3">
@@ -73,7 +80,7 @@ export default function CheckoutPage() {
           </div>
         ) : (
           <>
-            {pizza.map((p) => (
+          {pizza.map((p) => (
               <div key={p.id} className="flex justify-between">
                 <span>{p.name} (1)</span>
                 <span className="text-green-600 font-bold whitespace-nowrap">
@@ -83,6 +90,7 @@ export default function CheckoutPage() {
             ))}
           </>
         )}
+
         {border && (
           <div className="flex items-center justify-between">
             <span>{border.name} (1)</span>
@@ -104,9 +112,14 @@ export default function CheckoutPage() {
         <>
           {drinks.map((d) => (
             <div key={d.id} className="flex justify-between">
-              <span>{d.name} ({d.quantity})</span>
+              <span>
+                {d.name} ({d.quantity})
+              </span>
               <span className="text-green-600 font-bold whitespace-nowrap">
-                R$ {(Number(d.quantity) * Number(d.price)).toFixed(2).replace(".", ",")}
+                R${" "}
+                {(Number(d.quantity) * Number(d.price))
+                  .toFixed(2)
+                  .replace(".", ",")}
               </span>
             </div>
           ))}

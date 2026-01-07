@@ -3,7 +3,6 @@
 import CardForm from "@/components/cardForm";
 import { useCart } from "@/context/cart/cartContext";
 import { createCardToken } from "@/utils/createMpToken";
-import getCoords from "@/utils/getCoords";
 import { getPaymentMethodByBin } from "@/utils/getPaymentMethodByBin";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -27,47 +26,25 @@ export type Inputs = {
 }
 
 
-export default function Gateway() {
+export default function Gateway({params}: {params: {id: string}}) {
   const { register, watch, handleSubmit } = useForm<Inputs>();
 
   const { total, items } = useCart();
 
-  console.log(total, "TOTAL");
-
-  console.log(watch("cpf"));
+  const { id } = params;
 
   const cardPayment = watch("paymentType");
+  const formatedPrice = total.toFixed(2).replace(".", ",");
 
 
   async function onSubmit(data: Inputs) {
 
-    // const coords = await getCoords({
-    //   cep: data.cep,
-    //   neighborhood: data.neighborhood,
-    //   street: data.street,
-    //   number: data.number,
-    // });
-
-    // console.log("COORDS", coords);
-
-    // const res = await fetch("/api/order", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "applicaiton/json"
-    //   },
-    //   body: JSON.stringify({
-    //     customer: data.name,
-    //     subtotal: total,
-        
-
-    //   })
-    // })
 
     const result = await createCardToken(data);
     const paymentMethodId = await getPaymentMethodByBin(data.cardNumber);
 
 
-    const res = await fetch("/api/gateway", {
+    const res = await fetch(`/api/gateway/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -97,18 +74,13 @@ export default function Gateway() {
     }
 
     toast.success("Pagamento aprovado");
-
-
+    
   }
 
 
-  const formatedPrice = total.toFixed(2).replace(".", ",");
-
   return (
-    <div className="pt-20 pb-10">
+    <div>
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
-
-
       <div>
         <h1 className="text-gray-700 font-bold text-xl mt-2">Forma de pagamento:</h1>
         <select 

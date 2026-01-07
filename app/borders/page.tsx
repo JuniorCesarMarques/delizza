@@ -30,7 +30,7 @@ export default function BordersPage() {
   };
 
   return (
-    <div className="flex flex-col items-center pt-30">
+    <div className="flex flex-col items-center">
       <h1 className="text-2xl font-bold text-center mb-4">
         Que tal uma borda recheada? 🍕
       </h1>

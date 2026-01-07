@@ -16,44 +16,52 @@ type ProductListType = {
 export default function PizzasList({ products, category }: ProductListType) {
   const { items } = useCart();
 
-  const pizzas = items.filter(item => item.type === "pizza");
+  const pizzas = items.filter((item) => item.type === "pizza");
   const qtyPizzas = pizzas.reduce((acc, p) => acc + p.quantity, 0);
 
   const router = useRouter();
 
   const handleNextStep = () => {
-    if(qtyPizzas === 2) {
+    if (qtyPizzas === 2) {
       router.push("/borders");
-      return
+      return;
     }
 
-    if(qtyPizzas === 1) {
+    if (qtyPizzas === 1) {
       toast.error("Selecione a segunda metade da pizza.");
-      return
+      return;
     }
 
     toast.error("Selecione algum sabor");
-  }
+  };
 
-  if(!products) return <ProductCardSkeleton />
+  if (!products) return <ProductCardSkeleton />;
 
   return (
-    <div className="pt-45">
-      <div className="fixed top-18 bg-green-500 z-10 w-full p-2">
+    <div className="py-15">
+      <div className="fixed top-18 z-10 w-full p-2">
         <h1>{category}</h1>
         <p className="font-bold text-2xl">Escolha o seu sabor preferido</p>
         <div className="flex items-center gap-2">
           <p className="font-bold">Sabores: </p>{" "}
           <div className="flex items-center gap-2">
-            {items.filter(i => i.type === "pizza").map((item, index) => (
-                <span className="p-1 bg-black text-white font-bold text-sm" key={index}>
-                  {item.name}
-              </span>
-            ))}
+            {items
+              .filter((i) => i.type === "pizza")
+              .map((item, index) => (
+                <div className="flex items-center gap-2">
+                  <p>Meia</p>
+                  <span
+                    className="p-1 bg-black text-white font-bold text-sm"
+                    key={index}
+                  >
+                    {item.name}
+                  </span>
+                </div>
+              ))}
           </div>
         </div>
       </div>
-      
+
       <div>
         {products?.map((product) => (
           <ProductCard key={product.id} product={product} />

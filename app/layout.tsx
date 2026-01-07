@@ -43,7 +43,9 @@ export default function RootLayout({
               <ReactQueryProvider>
                 <ModalProvider>
                   <Header />
-                    {children}
+                    <div className="py-30">
+                      {children}
+                    </div>
                     <Script
                       src="https://sdk.mercadopago.com/js/v2"
                       strategy="afterInteractive"

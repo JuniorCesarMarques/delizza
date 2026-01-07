@@ -1,6 +1,9 @@
 "use client";
 
+import { useCart } from "@/context/cart/cartContext";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type Inputs = {
     name: string;
@@ -12,9 +15,33 @@ type Inputs = {
 
 export default function InfoForm() {
   const { register, handleSubmit } = useForm<Inputs>();
+  const router = useRouter();
 
-  const onSubmit = (data: Inputs) => {
+  const cart = useCart();
 
+  const onSubmit = async (data: Inputs) => {
+
+    const res = await fetch("api/create-order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({...data, cart})
+    })
+
+    if(!res.ok) {
+        toast.error("Erro ao salvar dados");
+        return
+    }
+     
+
+    const { user, coords } = await res.json();
+
+    console.log(user, coords);
+
+    toast.success("Dados salvos com sucesso");
+    router.push(`/gateway/${user.id}`);
+    
   };
 
   return (
@@ -26,7 +53,7 @@ export default function InfoForm() {
 
       {/* Informações */}
       <div className="flex flex-col w-full">
-        <label className="text-gray-600 font-semibold mb-1">Nome</label>
+        <label className="text-gray-600 font-semibold mb-1">Nome*</label>
         <input
           className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Digite seu nome"
@@ -40,7 +67,7 @@ export default function InfoForm() {
       {/* Grid do endereço */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
         <div className="flex flex-col">
-          <label className="text-gray-600 font-semibold mb-1">CEP</label>
+          <label className="text-gray-600 font-semibold mb-1">CEP*</label>
           <input
             className="border rounded-xl p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
             placeholder="Digite o CEP"

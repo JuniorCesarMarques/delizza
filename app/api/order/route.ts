@@ -2,20 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 
-export async function POST(req: Request) {
-
-    const { cus } = await req.json();
-
-    const order = await prisma.order.create({
-        data: {
-            customer: 
-        }
-    })
-}
-
 export async function GET() {
 
-    const orders = await prisma.order.findMany();
+    const orders = await prisma.order.findMany({
+        include: {
+            items: true
+        }
+    });
 
 
     return NextResponse.json(orders);

@@ -6,9 +6,11 @@ import Link from "next/link";
 
 import { IoHomeOutline } from "react-icons/io5";
 import { useCart } from "@/context/cart/cartContext";
+import { useAuth } from "@/app/contexts/AuthContext";
 
 export default function Navbar() {
   const { totalQty } = useCart();
+  const { user } = useAuth();
 
   return (
     <nav className="fixed bottom-0 w-screen bg-zinc-200">
@@ -19,11 +21,11 @@ export default function Navbar() {
           </Link>
         </li>
         <li className="flex flex-col items-center">
-          <span>
+          {user && <span>
             <Link href="/ordersList">
               <LuNotebookPen size={20} />
             </Link>
-          </span>
+          </span>}
         </li>
         <Link href="/checkout">
         <li className="flex flex-col items-center cursor-pointer relative">
