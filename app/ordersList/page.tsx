@@ -4,10 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 
+type OrderItemType = {
+  id: string;
+  productName: string;
+  quantity: number;
+  type: string;
+}
+
 type OrdersType = {
   id: string;
   customer?: string;
-  items: any[];
+  items: OrderItemType[];
   total: number;
   subtotal: string;
   deliveryFee: string;
