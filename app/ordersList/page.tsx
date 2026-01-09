@@ -28,12 +28,7 @@ export default function OrdersList() {
 
   const router = useRouter();
 
-  if(!user) {
-    router.push("/");
-    return
-  }
-
-  const fetcher = async () => {
+    const fetcher = async () => {
     const res = await fetch(`/api/order`, { cache: "no-store" });
 
     if (!res.ok) {
@@ -50,10 +45,16 @@ export default function OrdersList() {
 
   console.log(orders, "ORDERS");
 
+  if(!user) {
+    router.push("/");
+    return
+  }
+
+
   return (
     <>
       {orders?.map((order) => (
-        <div className="max-w-xl mx-auto p-10 border rounded-lg space-y-4">
+        <div key={order.id} className="max-w-xl mx-auto p-10 border rounded-lg space-y-4">
           {/* Cabeçalho */}
           <h2 className="text-lg font-semibold">Pedido</h2>
           <span className="text-gray-500">
