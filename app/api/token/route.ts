@@ -3,7 +3,14 @@ import { cookies } from "next/headers";
 
 import { prisma } from "@/lib/prisma";
 
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+
+import type { JwtPayload } from 'jsonwebtoken'
+
+interface AuthTokenPayload extends JwtPayload {
+  sub: string
+}
+
 
 export async function GET(req: Request) {
   const cookieStore = await cookies();
@@ -14,7 +21,11 @@ export async function GET(req: Request) {
     return NextResponse.json({ user: null }, { status: 401 });
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if(!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not defined")
+    }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET) as AuthTokenPayload;
 
   console.log(decoded, "DECODED");
 
