@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { haversineKm } from "@/utils/haversineKm";
 import { feeCalculator } from "@/utils/feeCalculator";
 
+import { CartItem } from "@/context/cart/cart.types";
+
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
@@ -77,7 +79,7 @@ export async function POST(request: NextRequest) {
         total: Number(body.cart.total) + fee,
         customer: body.name,
         items: {
-          create: body.cart.items.map((i: any) => ({
+          create: body.cart.items.map((i: CartItem) => ({
             productName: i.name,
             type: i.type.toUpperCase(),
             quantity: i.quantity,
